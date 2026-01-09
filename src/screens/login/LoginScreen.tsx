@@ -1,40 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  Linking,
-  Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import type { NavigationProps } from '../../types/navigation';
 import { Button } from '@/components';
+import { useAuth } from '@/context/AuthProvider';
 
 export default function LoginScreen({ navigation }: NavigationProps<'Login'>) {
-  const handleLogin = () => {
-    try {
-      const keycloakUrl = 'http://192.168.80.161:8081/auth/realms/abablockchain/protocol/openid-connect/auth';
-      const clientId = 'aba-app-mobile';
-      const redirectUri = 'abablockchain://callback';
-      
-      const authUrl = `${keycloakUrl}?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=openid`;
-      
-      // Abre o navegador externo para autenticação
-      Linking.openURL(authUrl).catch((err) => {
-        console.error('Erro ao abrir URL:', err);
-        Alert.alert('Erro', 'Não foi possível abrir o navegador');
-      });
-      
-      // Navegar para Home (demonstração simples)
+  const { login, isAuthenticated, isLoading } = useAuth();
+
+  useEffect(() => {
+    // Se já estiver autenticado, redirecionar para Home
+    if (isAuthenticated) {
       navigation.replace('Home');
-    } catch (error) {
-      console.error('Erro ao fazer login:', error);
-      Alert.alert('Erro', 'Ocorreu um erro ao tentar fazer login');
     }
-  };
+  }, [isAuthenticated, navigation]);
+
+  if (isLoading) {
+    return (
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color="#007AFF" />
+        <Text style={styles.loadingText}>Carregando...</Text>
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView
@@ -47,7 +42,12 @@ export default function LoginScreen({ navigation }: NavigationProps<'Login'>) {
         <Text style={styles.subtitle}>Faça login para continuar</Text>
 
         <View style={styles.form}>
-          <Button title="Entrar" onPress={handleLogin} variant='secondary' />
+          <Button 
+            title="Entrar com Keycloak" 
+            onPress={login} 
+            variant="primary"
+            size="large"
+          />
         </View>
       </View>
     </KeyboardAvoidingView>

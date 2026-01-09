@@ -1,13 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import type { NavigationProps } from '../../types/navigation';
+import { useAuth } from '@/context/AuthProvider';
+import { Button } from '@/components';
 
 export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
+  const { logout, tokens } = useAuth();
   
-  const handleLogout = () => {
-    // Adicione aqui sua lógica de logout
-    navigation.navigate('Login');
+  const handleLogout = async () => {
+    await logout();
+    navigation.replace('Login');
   };
 
   return (
@@ -20,10 +23,10 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Navegação Configurada ✅</Text>
+          <Text style={styles.cardTitle}>Autenticação Keycloak ✅</Text>
           <Text style={styles.cardText}>
-            A estrutura de navegação está pronta para uso. Você pode adicionar novas telas
-            seguindo o padrão estabelecido.
+            Você está autenticado com sucesso!{'\n\n'}
+            Token disponível: {tokens?.accessToken ? 'Sim ✓' : 'Não'}
           </Text>
         </View>
 
@@ -36,9 +39,12 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
           </Text>
         </View>
 
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={styles.logoutText}>Sair</Text>
-        </TouchableOpacity>
+        <Button 
+          title="Sair" 
+          variant="danger" 
+          size="large"
+          onPress={handleLogout}
+        />
       </ScrollView>
     </View>
   );
