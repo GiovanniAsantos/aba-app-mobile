@@ -11,6 +11,12 @@ export type RootStackParamList = {
   Login: undefined;
   Home: undefined;
   Profile: undefined;
+  Dashboard: undefined;
+  Assinatura: undefined;
+  Blockchain: undefined;
+  BPMS: undefined;
+  Cloud: undefined;
+  Environments: undefined;
   // Adicione novas rotas aqui seguindo o padrão:
   // NomeDaTela: { parametro1: tipo, parametro2: tipo } | undefined;
 };

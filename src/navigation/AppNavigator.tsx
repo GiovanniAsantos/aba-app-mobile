@@ -6,6 +6,12 @@ import { RootStackParamList } from '../types/navigation';
 import HomeScreen from '../screens/home/HomeScreen';
 import LoginScreen from '../screens/login/LoginScreen';
 import ProfileScreen from '@/screens/profile/ProfileScreen';
+import DashboardScreen from '@/screens/dashboard/DashboardScreen';
+import BlockchainScreen from '@/screens/blockchain/BlockchainScreen';
+import AssinaturaScreen from '@/screens/assinatura/AssinaturaScreen';
+import BPMSScreen from '@/screens/bpms/BPMSScreen';
+import CloudScreen from '@/screens/cloud/CloudScreen';
+import EnvironmentsScreen from '@/screens/environments/EnvironmentsScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -44,7 +50,7 @@ export default function AppNavigator() {
         name="Home" 
         component={HomeScreen}
         options={{
-          title: 'Início',
+          headerShown: false, // Remove header (usa layout personalizado)
           headerBackVisible: false, // Remove botão voltar
         }}
       />
@@ -52,8 +58,56 @@ export default function AppNavigator() {
         name="Profile" 
         component={ProfileScreen}
         options={{
-          title: 'Perfil',
+          headerShown: false, // Remove header (usa layout personalizado)
           headerBackVisible: false, // Remove botão voltar
+        }}
+      />
+      <Stack.Screen 
+        name="Dashboard" 
+        component={DashboardScreen}
+        options={{
+          headerShown: false,
+          headerBackVisible: false,
+        }}
+      />
+      <Stack.Screen 
+        name="Blockchain" 
+        component={BlockchainScreen}
+        options={{
+          headerShown: false,
+          headerBackVisible: false,
+        }}
+      />
+      <Stack.Screen 
+        name="Assinatura" 
+        component={AssinaturaScreen}
+        options={{
+          headerShown: false,
+          headerBackVisible: false,
+        }}
+      />
+      <Stack.Screen 
+        name="BPMS" 
+        component={BPMSScreen}
+        options={{
+          headerShown: false,
+          headerBackVisible: false,
+        }}
+      />
+      <Stack.Screen 
+        name="Cloud" 
+        component={CloudScreen}
+        options={{
+          headerShown: false,
+          headerBackVisible: false,
+        }}
+      />
+      <Stack.Screen 
+        name="Environments" 
+        component={EnvironmentsScreen}
+        options={{
+          headerShown: false,
+          headerBackVisible: false,
         }}
       />
       
