@@ -1,100 +1,108 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { NavigationProps } from '../../types/navigation';
-import { useAuth } from '@/context/AuthProvider';
-import { Button } from '@/components';
+import { MainLayout } from '@/components';
+import { styles } from './style';
 
 export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
-  const { logout, tokens } = useAuth();
-  
-  const handleLogout = async () => {
-    await logout();
-    navigation.replace('Login');
-  };
-
   return (
-    <View style={styles.container}>
-      <StatusBar style="light" />
+    <MainLayout navigation={navigation}>
+      <StatusBar style="dark" />
       <ScrollView style={styles.content}>
         <View style={styles.header}>
           <Text style={styles.greeting}>Olá! 👋</Text>
           <Text style={styles.subtitle}>Bem-vindo ao Aba Blockchain</Text>
         </View>
 
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Autenticação Keycloak ✅</Text>
-          <Text style={styles.cardText}>
-            Você está autenticado com sucesso!{'\n\n'}
-            Token disponível: {tokens?.accessToken ? 'Sim ✓' : 'Não'}
-          </Text>
+        <View style={styles.statsGrid}>
+          <View style={styles.statCard}>
+            <View style={styles.statIconBox}>
+              <MaterialCommunityIcons name="file-document" size={24} color="#4F6AF5" />
+            </View>
+            <Text style={styles.statValue}>24</Text>
+            <Text style={styles.statLabel}>Documentos</Text>
+          </View>
+
+          <View style={styles.statCard}>
+            <View style={styles.statIconBox}>
+              <MaterialCommunityIcons name="cloud-check" size={24} color="#10b981" />
+            </View>
+            <Text style={styles.statValue}>8</Text>
+            <Text style={styles.statLabel}>Na Nuvem</Text>
+          </View>
+
+          <View style={styles.statCard}>
+            <View style={styles.statIconBox}>
+              <MaterialCommunityIcons name="pen" size={24} color="#f59e0b" />
+            </View>
+            <Text style={styles.statValue}>12</Text>
+            <Text style={styles.statLabel}>Assinados</Text>
+          </View>
+
+          <View style={styles.statCard}>
+            <View style={styles.statIconBox}>
+              <MaterialCommunityIcons name="cog-outline" size={24} color="#8b5cf6" />
+            </View>
+            <Text style={styles.statValue}>5</Text>
+            <Text style={styles.statLabel}>Processos</Text>
+          </View>
         </View>
 
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Como adicionar novas telas:</Text>
-          <Text style={styles.cardText}>
-            1. Crie o arquivo da tela em src/screens/{'\n'}
-            2. Adicione o tipo em src/types/navigation.ts{'\n'}
-            3. Registre a rota em src/navigation/AppNavigator.tsx
-          </Text>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Ações Rápidas</Text>
+          
+          <View style={styles.actionCard}>
+            <View style={styles.actionIcon}>
+              <MaterialCommunityIcons name="upload" size={28} color="#4F6AF5" />
+            </View>
+            <View style={styles.actionContent}>
+              <Text style={styles.actionTitle}>Enviar Documento</Text>
+              <Text style={styles.actionDescription}>
+                Faça upload de um novo documento para a nuvem
+              </Text>
+            </View>
+            <MaterialCommunityIcons name="chevron-right" size={24} color="#ccc" />
+          </View>
+
+          <View style={styles.actionCard}>
+            <View style={styles.actionIcon}>
+              <MaterialCommunityIcons name="file-sign" size={28} color="#10b981" />
+            </View>
+            <View style={styles.actionContent}>
+              <Text style={styles.actionTitle}>Assinar Documento</Text>
+              <Text style={styles.actionDescription}>
+                Adicione sua assinatura digital
+              </Text>
+            </View>
+            <MaterialCommunityIcons name="chevron-right" size={24} color="#ccc" />
+          </View>
+
+          <View style={styles.actionCard}>
+            <View style={styles.actionIcon}>
+              <MaterialCommunityIcons name="folder-open" size={28} color="#f59e0b" />
+            </View>
+            <View style={styles.actionContent}>
+              <Text style={styles.actionTitle}>Meus Arquivos</Text>
+              <Text style={styles.actionDescription}>
+                Acesse todos os seus documentos
+              </Text>
+            </View>
+            <MaterialCommunityIcons name="chevron-right" size={24} color="#ccc" />
+          </View>
         </View>
 
-        <Button 
-          title="Sair" 
-          variant="danger" 
-          size="large"
-          onPress={handleLogout}
-        />
+        <View style={styles.infoCard}>
+          <MaterialCommunityIcons name="information" size={24} color="#4F6AF5" />
+          <View style={styles.infoContent}>
+            <Text style={styles.infoTitle}>Layout com Menu Inferior</Text>
+            <Text style={styles.infoText}>
+              Toque no botão central da barra inferior para abrir o menu de navegação
+            </Text>
+          </View>
+        </View>
       </ScrollView>
-    </View>
+    </MainLayout>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  content: {
-    flex: 1,
-    padding: 20,
-  },
-  header: {
-    marginBottom: 30,
-  },
-  greeting: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 5,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#666',
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 20,
-    marginBottom: 15,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 10,
-  },
-  cardText: {
-    fontSize: 14,
-    color: '#666',
-    lineHeight: 20,
-  },
-});
