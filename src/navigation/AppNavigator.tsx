@@ -6,7 +6,6 @@ import { RootStackParamList } from '../types/navigation';
 import HomeScreen from '../screens/home/HomeScreen';
 import LoginScreen from '../screens/login/LoginScreen';
 import ProfileScreen from '@/screens/profile/ProfileScreen';
-import DashboardScreen from '@/screens/dashboard/DashboardScreen';
 import BlockchainScreen from '@/screens/blockchain/BlockchainScreen';
 import AssinaturaScreen from '@/screens/assinatura/AssinaturaScreen';
 import BPMSScreen from '@/screens/bpms/BPMSScreen';
@@ -35,6 +34,7 @@ export default function AppNavigator() {
         headerTitleStyle: {
           fontWeight: 'bold',
         },
+        animation: 'fade',
         // Descomente para remover header globalmente:
         // headerShown: false,
       }}
@@ -60,14 +60,6 @@ export default function AppNavigator() {
         options={{
           headerShown: false, // Remove header (usa layout personalizado)
           headerBackVisible: false, // Remove botão voltar
-        }}
-      />
-      <Stack.Screen 
-        name="Dashboard" 
-        component={DashboardScreen}
-        options={{
-          headerShown: false,
-          headerBackVisible: false,
         }}
       />
       <Stack.Screen 

@@ -9,11 +9,13 @@ import {
   PanResponder,
   TouchableWithoutFeedback,
   ScrollView,
+  Platform,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 const BOTTOM_BAR_HEIGHT = 70;
+const ANDROID_BOTTOM_PADDING = Platform.OS === 'android' ? 40 : 0;
 const MENU_HEIGHT = SCREEN_HEIGHT * 0.75;
 
 interface MainLayoutProps {
@@ -81,7 +83,6 @@ export default function MainLayout({ children, navigation }: MainLayoutProps) {
 
   const menuItems = [
     { icon: 'home', label: 'Início', screen: 'Home' },
-    { icon: 'view-dashboard', label: 'Dashboard', screen: 'Dashboard' },
     { icon: 'cube-outline', label: 'Blockchain', screen: 'Blockchain' },
     { icon: 'file-sign', label: 'Assinatura', screen: 'Assinatura' },
     { icon: 'sitemap', label: 'BPMS', screen: 'BPMS' },
@@ -106,6 +107,11 @@ export default function MainLayout({ children, navigation }: MainLayoutProps) {
 
   return (
     <View style={styles.container}>
+      {/* Fundo preto para Android */}
+      {Platform.OS === 'android' && (
+        <View style={styles.androidBottomBackground} />
+      )}
+
       {/* Conteúdo principal */}
       <View style={styles.content}>
         {children}
@@ -228,9 +234,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
+  androidBottomBackground: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: ANDROID_BOTTOM_PADDING,
+    backgroundColor: '#000',
+    zIndex: 4,
+    pointerEvents: 'none',
+  },
   content: {
     flex: 1,
-    marginBottom: BOTTOM_BAR_HEIGHT,
+    marginBottom: BOTTOM_BAR_HEIGHT + ANDROID_BOTTOM_PADDING,
   },
   overlay: {
     position: 'absolute',
@@ -243,7 +259,7 @@ const styles = StyleSheet.create({
   },
   menu: {
     position: 'absolute',
-    bottom: 0,
+    bottom: ANDROID_BOTTOM_PADDING,
     left: 0,
     right: 0,
     height: MENU_HEIGHT,
@@ -315,7 +331,7 @@ const styles = StyleSheet.create({
   },
   bottomBar: {
     position: 'absolute',
-    bottom: 0,
+    bottom: ANDROID_BOTTOM_PADDING,
     left: 0,
     right: 0,
     height: BOTTOM_BAR_HEIGHT,
