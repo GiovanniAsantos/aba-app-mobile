@@ -83,7 +83,6 @@ export default function MainLayout({ children, navigation }: MainLayoutProps) {
 
   const menuItems = [
     { icon: 'home', label: 'Início', screen: 'Home' },
-    { icon: 'cube-outline', label: 'Blockchain', screen: 'Blockchain' },
     { icon: 'file-sign', label: 'Assinatura', screen: 'Assinatura' },
     { icon: 'sitemap', label: 'BPMS', screen: 'BPMS' },
     { icon: 'cloud', label: 'Nuvem', screen: 'Cloud' },
@@ -195,12 +194,20 @@ export default function MainLayout({ children, navigation }: MainLayoutProps) {
 
       {/* Barra inferior fixa */}
       <View style={styles.bottomBar}>
-        <TouchableOpacity style={styles.bottomButton} activeOpacity={0.7}>
+        <TouchableOpacity 
+          style={styles.bottomButton} 
+          activeOpacity={0.7}
+          onPress={() => navigation?.navigate('Home')}
+        >
           <MaterialCommunityIcons name="home" size={24} color="#666" />
           <Text style={styles.bottomButtonText}>Início</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.bottomButton} activeOpacity={0.7}>
+        <TouchableOpacity 
+          style={styles.bottomButton} 
+          activeOpacity={0.7}
+          onPress={() => navigation?.navigate('Assinatura')}
+        >
           <MaterialCommunityIcons name="file-document" size={24} color="#666" />
           <Text style={styles.bottomButtonText}>Docs</Text>
         </TouchableOpacity>
@@ -215,12 +222,20 @@ export default function MainLayout({ children, navigation }: MainLayoutProps) {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.bottomButton} activeOpacity={0.7}>
+        <TouchableOpacity 
+          style={styles.bottomButton} 
+          activeOpacity={0.7}
+          onPress={() => navigation?.navigate('Cloud')}
+        >
           <MaterialCommunityIcons name="cloud" size={24} color="#666" />
           <Text style={styles.bottomButtonText}>Nuvem</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.bottomButton} activeOpacity={0.7}>
+        <TouchableOpacity 
+          style={styles.bottomButton} 
+          activeOpacity={0.7}
+          onPress={() => navigation?.navigate('Profile')}
+        >
           <MaterialCommunityIcons name="account" size={24} color="#666" />
           <Text style={styles.bottomButtonText}>Perfil</Text>
         </TouchableOpacity>

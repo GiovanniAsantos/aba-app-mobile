@@ -60,7 +60,7 @@ export default function Button({
       {...rest}
     >
       {loading ? (
-        <ActivityIndicator color={variant === 'secondary' ? '#007AFF' : '#fff'} />
+        <ActivityIndicator color={variant === 'secondary' ? '#4F6AF5' : '#fff'} />
       ) : (
         <Text style={getTextStyle()}>{title}</Text>
       )}

@@ -12,7 +12,6 @@ export type RootStackParamList = {
   Home: undefined;
   Profile: undefined;
   Assinatura: undefined;
-  Blockchain: undefined;
   BPMS: undefined;
   Cloud: undefined;
   Environments: undefined;

@@ -2,9 +2,9 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#007AFF',
-    borderRadius: 10,
-    paddingVertical: 15,
+    backgroundColor: '#4F6AF5',
+    borderRadius: 12,
+    paddingVertical: 16,
     paddingHorizontal: 20,
     alignItems: 'center',
     justifyContent: 'center',
@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
   buttonTextDisabled: {
     color: '#999',
@@ -26,24 +26,24 @@ export const styles = StyleSheet.create({
   // Variações de estilo
   buttonSecondary: {
     backgroundColor: '#fff',
-    borderWidth: 2,
-    borderColor: '#007AFF',
+    borderWidth: 1,
+    borderColor: '#4F6AF5',
   },
   buttonSecondaryText: {
-    color: '#007AFF',
+    color: '#4F6AF5',
   },
   buttonDanger: {
-    backgroundColor: '#FF3B30',
+    backgroundColor: '#ef4444',
   },
   buttonSuccess: {
-    backgroundColor: '#34C759',
+    backgroundColor: '#10b981',
   },
   buttonSmall: {
-    paddingVertical: 10,
-    paddingHorizontal: 15,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
   },
   buttonLarge: {
     paddingVertical: 18,
-    paddingHorizontal: 25,
+    paddingHorizontal: 24,
   },
 });
