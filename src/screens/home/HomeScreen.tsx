@@ -19,7 +19,7 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
       <ScrollView style={styles.content}>
         <View style={styles.header}>
           <Text style={styles.greeting}>Olá! 👋</Text>
-          <Text style={styles.subtitle}>Bem-vindo ao seu app</Text>
+          <Text style={styles.subtitle}>Bem-vindo ao Aba Blockchain</Text>
         </View>
 
         <View style={styles.card}>
@@ -96,18 +96,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     lineHeight: 20,
-  },
-  logoutButton: {
-    backgroundColor: '#FF3B30',
-    borderRadius: 10,
-    paddingVertical: 15,
-    alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 40,
-  },
-  logoutText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
 });
