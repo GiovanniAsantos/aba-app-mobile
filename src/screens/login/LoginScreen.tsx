@@ -158,21 +158,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 24,
     shadowColor: '#4F6AF5',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  logoText: {
-    color: '#ffffff',
-    fontSize: 32,
-    fontWeight: 'bold',
-  },
-  brandName: {
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.25,
     shadowRadius: 16,
     elevation: 8,
+  },
+  logoText: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  brandName: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#1a1a1a',
+    letterSpacing: -0.5,
   },
   brandTagline: {
     fontSize: 14,
@@ -212,9 +212,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 16,
     elevation: 8,
-  },
-  loginIcon: {
-    marginRight: 8,
   },
   loginButtonText: {
     color: '#ffffff',
@@ -258,8 +255,8 @@ const styles = StyleSheet.create({
   },
   featureIcon: {
     fontSize: 20,
-    color: '#4F6AF5',
     fontWeight: 'bold',
+    color: '#4F6AF5',
   },
   featureLabel: {
     fontSize: 12,

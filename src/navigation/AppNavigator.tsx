@@ -6,7 +6,6 @@ import { RootStackParamList } from '../types/navigation';
 import HomeScreen from '../screens/home/HomeScreen';
 import LoginScreen from '../screens/login/LoginScreen';
 import ProfileScreen from '@/screens/profile/ProfileScreen';
-import BlockchainScreen from '@/screens/blockchain/BlockchainScreen';
 import AssinaturaScreen from '@/screens/assinatura/AssinaturaScreen';
 import BPMSScreen from '@/screens/bpms/BPMSScreen';
 import CloudScreen from '@/screens/cloud/CloudScreen';
@@ -60,14 +59,6 @@ export default function AppNavigator() {
         options={{
           headerShown: false, // Remove header (usa layout personalizado)
           headerBackVisible: false, // Remove botão voltar
-        }}
-      />
-      <Stack.Screen 
-        name="Blockchain" 
-        component={BlockchainScreen}
-        options={{
-          headerShown: false,
-          headerBackVisible: false,
         }}
       />
       <Stack.Screen 
