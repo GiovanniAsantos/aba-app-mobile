@@ -64,6 +64,11 @@ export const styles = StyleSheet.create({
     shadowRadius: 16,
     elevation: 8,
   },
+  logoText: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
   brandName: {
     fontSize: 28,
     fontWeight: 'bold',
@@ -152,9 +157,19 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  featureIcon: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#4F6AF5',
+  },
   featureLabel: {
     fontSize: 12,
     fontWeight: '500',
     color: '#666666',
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#666',
   },
 });

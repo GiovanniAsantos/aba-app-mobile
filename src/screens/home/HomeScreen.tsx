@@ -1,19 +1,84 @@
-import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { NavigationProps } from '../../types/navigation';
 import { MainLayout } from '@/components';
 import { styles } from './style';
+import { apiAccountUrlV1 } from '@/config/api';
+import { useAuth } from '@/context/AuthProvider';
+
+interface UserInfo {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  avatar?: string;
+}
 
 export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
+  const { tokens } = useAuth();
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadUserInfo();
+  }, []);
+
+  const loadUserInfo = async () => {
+    try {
+      setLoading(true);
+
+      if (!tokens?.accessToken) {
+        throw new Error('Token de acesso não encontrado');
+      }
+
+      const response = await fetch(`${apiAccountUrlV1}/accounts/me`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${tokens.accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erro ao buscar informações: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setUserInfo(data?.content);
+    } catch (error) {
+      console.error('Erro ao carregar informações do usuário:', error);
+      Alert.alert(
+        'Erro',
+        'Não foi possível carregar suas informações. Tente novamente mais tarde.'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <MainLayout navigation={navigation}>
+        <View style={[styles.content, { justifyContent: 'center', alignItems: 'center' }]}>
+          <ActivityIndicator size="large" color="#4F6AF5" />
+          <Text style={{ marginTop: 16, color: '#666' }}>Carregando...</Text>
+        </View>
+      </MainLayout>
+    );
+  }
+
   return (
     <MainLayout navigation={navigation}>
       <StatusBar style="dark" />
       <ScrollView style={styles.content}>
         <View style={styles.header}>
-          <Text style={styles.greeting}>Olá! 👋</Text>
+          <Text style={styles.greeting}>Olá, {userInfo?.name}!</Text>
           <Text style={styles.subtitle}>Bem-vindo ao Aba Blockchain</Text>
+          {userInfo?.email && (
+            <Text style={styles.userEmail}>{userInfo.email}</Text>
+          )}
         </View>
 
         <View style={styles.statsGrid}>

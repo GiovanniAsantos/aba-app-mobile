@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { NavigationProps } from '../../types/navigation';
-import { MainLayout } from '@/components';
+import { MainLayout, Button } from '@/components';
 import { styles } from './style';
 
 export default function ProfileScreen({ navigation }: NavigationProps<'Profile'>) {
@@ -81,10 +81,11 @@ export default function ProfileScreen({ navigation }: NavigationProps<'Profile'>
         </View>
 
         <View style={styles.section}>
-          <TouchableOpacity style={styles.editButton}>
-            <MaterialCommunityIcons name="pencil" size={20} color="#fff" />
-            <Text style={styles.editButtonText}>Editar Perfil</Text>
-          </TouchableOpacity>
+          <Button 
+            title="Editar Perfil" 
+            onPress={() => {}} 
+            variant="primary"
+          />
         </View>
       </ScrollView>
     </MainLayout>

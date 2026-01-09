@@ -142,4 +142,31 @@ export const config = {
 // Exportação de atalhos para facilitar uso
 export const { company, keycloak, api, recaptcha, assets } = config;
 
+// Exportações diretas das URLs base para uso simplificado
+export const apiAccountUrl = API_ACCOUNT_URL;
+export const apiAccountUrlWs = API_ACCOUNT_URL_WS;
+export const apiAccountUrlV1 = API_ACCOUNT_URL_V1;
+
+export const apiOrchestratorUrl = API_ORCHESTRATOR_URL;
+export const apiOrchestratorUrlWs = API_ORCHESTRATOR_URL_WS;
+
+export const apiEmailUrl = API_EMAIL_URL;
+export const apiEmailUrlWs = API_EMAIL_URL_WS;
+export const apiEmailUrlV1 = API_EMAIL_URL_V1;
+
+export const apiSignatureUrl = API_SIGNATURE_URL;
+export const apiSignatureWsUrl = API_SIGNATURE_WS_URL;
+export const apiSignatureUrlV1 = API_SIGNATURE_URL_V1;
+export const apiSignaturePublicUrlV1 = API_SIGNATURE_PUBLIC_URL_V1;
+
+export const apiPlansUrl = API_PLANS_URL;
+
+export const apiCloudUrl = API_CLOUD_URL;
+export const apiCloudUrlPublic = API_CLOUD_URL_PUBLIC;
+
+export const apiBpmsUrl = API_BPMS_URL;
+export const apiBpmsUrlWs = API_BPMS_URL_WS;
+export const apiBpmsUrlV1 = API_BPMS_URL_V1;
+export const apiBpmsUrlV1Public = API_BPMS_URL_V1_PUBLIC;
+
 export default config;

@@ -27,6 +27,11 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
   },
+  userEmail: {
+    fontSize: 14,
+    color: '#999',
+    marginTop: 4,
+  },
   statsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',

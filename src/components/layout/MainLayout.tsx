@@ -12,6 +12,7 @@ import {
   Platform,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useAuth } from '@/context/AuthProvider';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 const BOTTOM_BAR_HEIGHT = 70;
@@ -24,6 +25,7 @@ interface MainLayoutProps {
 }
 
 export default function MainLayout({ children, navigation }: MainLayoutProps) {
+  const { logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuPosition = useRef(new Animated.Value(0)).current;
 
@@ -91,17 +93,23 @@ export default function MainLayout({ children, navigation }: MainLayoutProps) {
     { icon: 'exit-to-app', label: 'Sair', screen: 'Login', isLogout: true },
   ];
 
-  const handleMenuItemPress = (item: any) => {
+  const handleMenuItemPress = async (item: any) => {
     closeMenu();
-    setTimeout(() => {
-      if (navigation) {
-        if (item.isLogout) {
+    
+    if (item.isLogout) {
+      await logout();
+      setTimeout(() => {
+        if (navigation) {
           navigation.replace(item.screen);
-        } else {
+        }
+      }, 300);
+    } else {
+      setTimeout(() => {
+        if (navigation) {
           navigation.navigate(item.screen);
         }
-      }
-    }, 300);
+      }, 300);
+    }
   };
 
   return (
