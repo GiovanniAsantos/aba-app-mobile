@@ -1,62 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import React from 'react';
+import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { NavigationProps } from '../../types/navigation';
 import { MainLayout } from '@/components';
 import { styles } from './style';
-import { apiAccountUrlV1 } from '@/config/api';
-import { useAuth } from '@/context/AuthProvider';
-
-interface UserInfo {
-  id: string;
-  name: string;
-  email: string;
-  phone?: string;
-  avatar?: string;
-}
+import { useUser } from '@/context/UserProvider';
 
 export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
-  const { tokens } = useAuth();
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { userInfo, loading } = useUser();
 
-  useEffect(() => {
-    loadUserInfo();
-  }, []);
+  const bpmsService = userInfo?.selectedEnvironments?.services.find(
+    (s) => s.typeProduct === "ALLOW_MODULE_BPMS"
+  );
+  const signatureService = userInfo?.selectedEnvironments?.services.find(
+    (s) => s.typeProduct === "ALLOW_MODULE_SIGNATURE"
+  );
+  const cloudService = userInfo?.selectedEnvironments?.services.find(
+    (s) => s.typeProduct === "ALLOW_MODULE_CLOUD"
+  );
 
-  const loadUserInfo = async () => {
-    try {
-      setLoading(true);
+  const hasBPMS = bpmsService?.permissions?.length! > 0;
+  const hasSignature = signatureService?.permissions?.length! > 0;
+  const hasCloud = cloudService?.permissions?.length! > 0;
 
-      if (!tokens?.accessToken) {
-        throw new Error('Token de acesso não encontrado');
-      }
-
-      const response = await fetch(`${apiAccountUrlV1}/accounts/me`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${tokens.accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Erro ao buscar informações: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setUserInfo(data?.content);
-    } catch (error) {
-      console.error('Erro ao carregar informações do usuário:', error);
-      Alert.alert(
-        'Erro',
-        'Não foi possível carregar suas informações. Tente novamente mais tarde.'
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  const bpmsIsActive = bpmsService?.active === true;
+  const signatureIsActive = signatureService?.active === true;
+  const cloudIsActive = cloudService?.active === true;
 
   if (loading) {
     return (
@@ -76,62 +46,107 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
         <View style={styles.header}>
           <Text style={styles.greeting}>Olá, {userInfo?.name}!</Text>
           <Text style={styles.subtitle}>Bem-vindo ao Aba Blockchain</Text>
-          {userInfo?.email && (
-            <Text style={styles.userEmail}>{userInfo.email}</Text>
+          {userInfo?.contact && (
+            <Text style={styles.userEmail}>{userInfo.contact}</Text>
           )}
         </View>
 
         <View style={styles.statsGrid}>
-          <View style={styles.statCard}>
-            <View style={styles.statIconBox}>
-              <MaterialCommunityIcons name="file-document" size={24} color="#4F6AF5" />
-            </View>
-            <Text style={styles.statValue}>24</Text>
-            <Text style={styles.statLabel}>Documentos</Text>
-          </View>
+          {hasBPMS && (
+            bpmsIsActive ?
+              <TouchableOpacity 
+                style={styles.statCard}
+                onPress={() => navigation.navigate('BPMS')}
+                activeOpacity={0.7}
+              >
+                <View style={styles.statIconBox}>
+                  <MaterialCommunityIcons name="cog-outline" size={24} color="#8b5cf6" />
+                </View>
+                <Text style={styles.statValue}>5</Text>
+                <Text style={styles.statLabel}>BPMS</Text>
+              </TouchableOpacity> : (
+                <View style={styles.statCardInactive}>
+                  <MaterialCommunityIcons name="cog-outline" size={24} color="#ccc" />
+                  <Text style={styles.statValueInactive}>Inativo</Text>
+                  <Text style={styles.statLabelInactive}>BPMS</Text>
+                </View>
+              )
+          )}
 
-          <View style={styles.statCard}>
-            <View style={styles.statIconBox}>
-              <MaterialCommunityIcons name="cloud-check" size={24} color="#10b981" />
-            </View>
-            <Text style={styles.statValue}>8</Text>
-            <Text style={styles.statLabel}>Na Nuvem</Text>
-          </View>
+          {
+            hasSignature && (
+              signatureIsActive ? (
+                <TouchableOpacity 
+                  style={styles.statCard}
+                  onPress={() => navigation.navigate('Assinatura')}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.statIconBox}>
+                    <MaterialCommunityIcons name="file-document" size={24} color="#4F6AF5" />
+                  </View>
+                  <Text style={styles.statValue}>24</Text>
+                  <Text style={styles.statLabel}>Assinatura</Text>
+                </TouchableOpacity>
+              ) : (
+                <View style={styles.statCardInactive}>
+                  <MaterialCommunityIcons name="file-document" size={24} color="#ccc" />
+                  <Text style={styles.statValueInactive}>Inativo</Text>
+                  <Text style={styles.statLabelInactive}>Assinatura</Text>
+                </View>
+              )
+            )
+          }
 
-          <View style={styles.statCard}>
-            <View style={styles.statIconBox}>
-              <MaterialCommunityIcons name="pen" size={24} color="#f59e0b" />
-            </View>
-            <Text style={styles.statValue}>12</Text>
-            <Text style={styles.statLabel}>Assinados</Text>
-          </View>
-
-          <View style={styles.statCard}>
-            <View style={styles.statIconBox}>
-              <MaterialCommunityIcons name="cog-outline" size={24} color="#8b5cf6" />
-            </View>
-            <Text style={styles.statValue}>5</Text>
-            <Text style={styles.statLabel}>Processos</Text>
-          </View>
+          {
+            hasCloud && (
+              cloudIsActive ? (
+                <TouchableOpacity 
+                  style={styles.statCard}
+                  onPress={() => navigation.navigate('Cloud')}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.statIconBox}>
+                    <MaterialCommunityIcons name="cloud-check" size={24} color="#10b981" />
+                  </View>
+                  <Text style={styles.statValue}>8</Text>
+                  <Text style={styles.statLabel}>Cloud</Text>
+                </TouchableOpacity>
+              ) : (
+                <View style={styles.statCardInactive}>
+                  <MaterialCommunityIcons name="file-document" size={24} color="#ccc" />
+                  <Text style={styles.statValueInactive}>Inativo</Text>
+                  <Text style={styles.statLabelInactive}>Cloud</Text>
+                </View>
+              )
+            )
+          }
         </View>
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Ações Rápidas</Text>
-          
-          <View style={styles.actionCard}>
+
+          <TouchableOpacity 
+            style={styles.actionCard}
+            onPress={() => navigation.navigate('Cloud')}
+            activeOpacity={0.7}
+          >
             <View style={styles.actionIcon}>
               <MaterialCommunityIcons name="upload" size={28} color="#4F6AF5" />
             </View>
             <View style={styles.actionContent}>
-              <Text style={styles.actionTitle}>Enviar Documento</Text>
+              <Text style={styles.actionTitle}>Salvar Documento</Text>
               <Text style={styles.actionDescription}>
                 Faça upload de um novo documento para a nuvem
               </Text>
             </View>
             <MaterialCommunityIcons name="chevron-right" size={24} color="#ccc" />
-          </View>
+          </TouchableOpacity>
 
-          <View style={styles.actionCard}>
+          <TouchableOpacity 
+            style={styles.actionCard}
+            onPress={() => navigation.navigate('Assinatura')}
+            activeOpacity={0.7}
+          >
             <View style={styles.actionIcon}>
               <MaterialCommunityIcons name="file-sign" size={28} color="#10b981" />
             </View>
@@ -142,9 +157,13 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
               </Text>
             </View>
             <MaterialCommunityIcons name="chevron-right" size={24} color="#ccc" />
-          </View>
+          </TouchableOpacity>
 
-          <View style={styles.actionCard}>
+          <TouchableOpacity 
+            style={styles.actionCard}
+            onPress={() => navigation.navigate('Cloud')}
+            activeOpacity={0.7}
+          >
             <View style={styles.actionIcon}>
               <MaterialCommunityIcons name="folder-open" size={28} color="#f59e0b" />
             </View>
@@ -155,17 +174,24 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
               </Text>
             </View>
             <MaterialCommunityIcons name="chevron-right" size={24} color="#ccc" />
-          </View>
-        </View>
+          </TouchableOpacity>
 
-        <View style={styles.infoCard}>
-          <MaterialCommunityIcons name="information" size={24} color="#4F6AF5" />
-          <View style={styles.infoContent}>
-            <Text style={styles.infoTitle}>Layout com Menu Inferior</Text>
-            <Text style={styles.infoText}>
-              Toque no botão central da barra inferior para abrir o menu de navegação
-            </Text>
-          </View>
+          <TouchableOpacity 
+            style={styles.actionCard}
+            onPress={() => navigation.navigate('BPMS')}
+            activeOpacity={0.7}
+          >
+            <View style={styles.actionIcon}>
+              <MaterialCommunityIcons name="transit-connection-variant" size={28} color="#8b5cf6" />
+            </View>
+            <View style={styles.actionContent}>
+              <Text style={styles.actionTitle}>Criar Atividade</Text>
+              <Text style={styles.actionDescription}>
+                Adicione uma nova atividade aos seus fluxos
+              </Text>
+            </View>
+            <MaterialCommunityIcons name="chevron-right" size={24} color="#ccc" />
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </MainLayout>

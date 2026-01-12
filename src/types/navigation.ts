@@ -11,10 +11,13 @@ export type RootStackParamList = {
   Login: undefined;
   Home: undefined;
   Profile: undefined;
+  EditProfile: undefined;
   Assinatura: undefined;
   BPMS: undefined;
   Cloud: undefined;
   Environments: undefined;
+  Signature: { signatureId: string };
+  SignDocument: { signatureId: string };
   // Adicione novas rotas aqui seguindo o padrão:
   // NomeDaTela: { parametro1: tipo, parametro2: tipo } | undefined;
 };

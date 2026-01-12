@@ -39,7 +39,7 @@ export const styles = StyleSheet.create({
     gap: 12,
   },
   statCard: {
-    width: '48%',
+    width: '100%',
     backgroundColor: '#fff',
     borderRadius: 16,
     padding: 16,
@@ -49,6 +49,11 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 8,
     elevation: 2,
+  },
+  statCardInactive: {
+    width: '100%',
+    backgroundColor: '#f9f9f9',
+    borderRadius: 16,
   },
   statIconBox: {
     width: 48,
@@ -65,7 +70,17 @@ export const styles = StyleSheet.create({
     color: '#1a1a1a',
     marginBottom: 4,
   },
+  statValueInactive: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#1a1a1a',
+    marginBottom: 4,
+  },
   statLabel: {
+    fontSize: 12,
+    color: '#666',
+  },
+  statLabelInactive: {
     fontSize: 12,
     color: '#666',
   },

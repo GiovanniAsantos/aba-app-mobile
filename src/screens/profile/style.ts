@@ -36,6 +36,12 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 4,
+    overflow: 'hidden',
+  },
+  avatarImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 50,
   },
   editAvatarButton: {
     position: 'absolute',
@@ -64,6 +70,12 @@ export const styles = StyleSheet.create({
     padding: 20,
   },
   sectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#1a1a1a',
+    marginBottom: 16,
+  },
+  sectionSubtitle: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#1a1a1a',
