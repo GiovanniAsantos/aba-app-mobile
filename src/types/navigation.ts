@@ -15,6 +15,8 @@ export type RootStackParamList = {
   BPMS: undefined;
   Cloud: undefined;
   Environments: undefined;
+  Fluxos: undefined;
+  MinhasAtividades: undefined;
   // Adicione novas rotas aqui seguindo o padrão:
   // NomeDaTela: { parametro1: tipo, parametro2: tipo } | undefined;
 };
