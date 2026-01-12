@@ -6,7 +6,7 @@
     ],
     "allowJs": true,
     "jsx": "react-native",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "module": "ESNext",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
