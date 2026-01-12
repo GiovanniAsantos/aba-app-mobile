@@ -13,6 +13,8 @@ import CloudScreen from '@/screens/cloud/CloudScreen';
 import EnvironmentsScreen from '@/screens/environments/EnvironmentsScreen';
 import SignDocumentScreen from '@/screens/assinatura/signDocument';
 import SeeSignatureScreen from '@/screens/assinatura/seeSignature';
+import FluxosScreen from '@/screens/bpms/FluxosScreen';
+import MinhasAtividadesScreen from '@/screens/bpms/MinhasAtividadesScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -120,6 +122,22 @@ export default function AppNavigator() {
         options={{
           headerShown: false,
           animation: 'slide_from_right',
+        }}
+      />
+      <Stack.Screen 
+        name="Fluxos" 
+        component={FluxosScreen}
+        options={{
+          headerShown: false,
+          headerBackVisible: false,
+        }}
+      />
+      <Stack.Screen 
+        name="MinhasAtividades" 
+        component={MinhasAtividadesScreen}
+        options={{
+          headerShown: false,
+          headerBackVisible: false,
         }}
       />
       

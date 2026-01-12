@@ -18,6 +18,8 @@ export type RootStackParamList = {
   Environments: undefined;
   Signature: { signatureId: string };
   SignDocument: { signatureId: string };
+  Fluxos: undefined;
+  MinhasAtividades: undefined;
   // Adicione novas rotas aqui seguindo o padrão:
   // NomeDaTela: { parametro1: tipo, parametro2: tipo } | undefined;
 };
