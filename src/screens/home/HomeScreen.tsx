@@ -42,15 +42,37 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
   return (
     <MainLayout navigation={navigation}>
       <StatusBar style="dark" />
-      <ScrollView style={styles.content}>
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        {/* Header com gradiente */}
         <View style={styles.header}>
-          <Text style={styles.greeting}>Olá, {userInfo?.name}!</Text>
-          <Text style={styles.subtitle}>Bem-vindo ao Aba Blockchain</Text>
-          {userInfo?.contact && (
-            <Text style={styles.userEmail}>{userInfo.contact}</Text>
+          <View style={styles.headerTop}>
+            <View>
+              <Text style={styles.greeting}>Olá, {userInfo?.name || 'Usuário'}! 👋</Text>
+              <Text style={styles.subtitle}>Bem-vindo ao Aba Blockchain</Text>
+            </View>
+            <TouchableOpacity 
+              style={styles.notificationButton}
+              onPress={() => {}}
+              activeOpacity={0.7}
+            >
+              <MaterialCommunityIcons name="bell-outline" size={24} color="#1a1a1a" />
+              <View style={styles.notificationBadge}>
+                <Text style={styles.notificationBadgeText}>3</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          
+          {userInfo?.selectedEnvironments && (
+            <View style={styles.environmentBadge}>
+              <MaterialCommunityIcons name="server" size={16} color="#4F6AF5" />
+              <Text style={styles.environmentText}>
+                {userInfo.selectedEnvironments.name}
+              </Text>
+            </View>
           )}
         </View>
 
+        {/* Cards de estatísticas em grid */}
         <View style={styles.statsGrid}>
           {hasBPMS && (
             bpmsIsActive ?
@@ -122,77 +144,112 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
           }
         </View>
 
+        {/* Resumo de atividades recentes */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Atividades Recentes</Text>
+            <TouchableOpacity activeOpacity={0.7}>
+              <Text style={styles.seeAllText}>Ver todas</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.activityCard}>
+            <View style={styles.activityIconContainer}>
+              <MaterialCommunityIcons name="file-check" size={20} color="#10b981" />
+            </View>
+            <View style={styles.activityContent}>
+              <Text style={styles.activityTitle}>Documento assinado</Text>
+              <Text style={styles.activityDescription}>Contrato_2024.pdf</Text>
+              <Text style={styles.activityTime}>Há 2 horas</Text>
+            </View>
+          </View>
+
+          <View style={styles.activityCard}>
+            <View style={[styles.activityIconContainer, { backgroundColor: '#eff6ff' }]}>
+              <MaterialCommunityIcons name="cloud-upload" size={20} color="#4F6AF5" />
+            </View>
+            <View style={styles.activityContent}>
+              <Text style={styles.activityTitle}>Upload realizado</Text>
+              <Text style={styles.activityDescription}>Relatório_Janeiro.pdf</Text>
+              <Text style={styles.activityTime}>Ontem</Text>
+            </View>
+          </View>
+
+          <View style={styles.activityCard}>
+            <View style={[styles.activityIconContainer, { backgroundColor: '#fef3c7' }]}>
+              <MaterialCommunityIcons name="cog-sync" size={20} color="#f59e0b" />
+            </View>
+            <View style={styles.activityContent}>
+              <Text style={styles.activityTitle}>Fluxo iniciado</Text>
+              <Text style={styles.activityDescription}>Aprovação de documento</Text>
+              <Text style={styles.activityTime}>Há 3 dias</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Ações Rápidas */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Ações Rápidas</Text>
+          
+          <View style={styles.quickActionsGrid}>
+            <TouchableOpacity 
+              style={styles.quickActionCard}
+              onPress={() => navigation.navigate('Cloud')}
+              activeOpacity={0.7}
+            >
+              <View style={[styles.quickActionIcon, { backgroundColor: '#eff6ff' }]}>
+                <MaterialCommunityIcons name="upload" size={28} color="#4F6AF5" />
+              </View>
+              <Text style={styles.quickActionTitle}>Upload</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity 
-            style={styles.actionCard}
-            onPress={() => navigation.navigate('Cloud')}
-            activeOpacity={0.7}
-          >
-            <View style={styles.actionIcon}>
-              <MaterialCommunityIcons name="upload" size={28} color="#4F6AF5" />
-            </View>
-            <View style={styles.actionContent}>
-              <Text style={styles.actionTitle}>Salvar Documento</Text>
-              <Text style={styles.actionDescription}>
-                Faça upload de um novo documento para a nuvem
-              </Text>
-            </View>
-            <MaterialCommunityIcons name="chevron-right" size={24} color="#ccc" />
-          </TouchableOpacity>
+            <TouchableOpacity 
+              style={styles.quickActionCard}
+              onPress={() => navigation.navigate('Assinatura')}
+              activeOpacity={0.7}
+            >
+              <View style={[styles.quickActionIcon, { backgroundColor: '#f0fdf4' }]}>
+                <MaterialCommunityIcons name="file-sign" size={28} color="#10b981" />
+              </View>
+              <Text style={styles.quickActionTitle}>Assinar</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity 
-            style={styles.actionCard}
-            onPress={() => navigation.navigate('Assinatura')}
-            activeOpacity={0.7}
-          >
-            <View style={styles.actionIcon}>
-              <MaterialCommunityIcons name="file-sign" size={28} color="#10b981" />
-            </View>
-            <View style={styles.actionContent}>
-              <Text style={styles.actionTitle}>Assinar Documento</Text>
-              <Text style={styles.actionDescription}>
-                Adicione sua assinatura digital
-              </Text>
-            </View>
-            <MaterialCommunityIcons name="chevron-right" size={24} color="#ccc" />
-          </TouchableOpacity>
+            <TouchableOpacity 
+              style={styles.quickActionCard}
+              onPress={() => navigation.navigate('Cloud')}
+              activeOpacity={0.7}
+            >
+              <View style={[styles.quickActionIcon, { backgroundColor: '#fef3c7' }]}>
+                <MaterialCommunityIcons name="folder-open" size={28} color="#f59e0b" />
+              </View>
+              <Text style={styles.quickActionTitle}>Arquivos</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity 
-            style={styles.actionCard}
-            onPress={() => navigation.navigate('Cloud')}
-            activeOpacity={0.7}
-          >
-            <View style={styles.actionIcon}>
-              <MaterialCommunityIcons name="folder-open" size={28} color="#f59e0b" />
-            </View>
-            <View style={styles.actionContent}>
-              <Text style={styles.actionTitle}>Meus Arquivos</Text>
-              <Text style={styles.actionDescription}>
-                Acesse todos os seus documentos
-              </Text>
-            </View>
-            <MaterialCommunityIcons name="chevron-right" size={24} color="#ccc" />
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            style={styles.actionCard}
-            onPress={() => navigation.navigate('BPMS')}
-            activeOpacity={0.7}
-          >
-            <View style={styles.actionIcon}>
-              <MaterialCommunityIcons name="transit-connection-variant" size={28} color="#8b5cf6" />
-            </View>
-            <View style={styles.actionContent}>
-              <Text style={styles.actionTitle}>Criar Atividade</Text>
-              <Text style={styles.actionDescription}>
-                Adicione uma nova atividade aos seus fluxos
-              </Text>
-            </View>
-            <MaterialCommunityIcons name="chevron-right" size={24} color="#ccc" />
-          </TouchableOpacity>
+            <TouchableOpacity 
+              style={styles.quickActionCard}
+              onPress={() => navigation.navigate('BPMS')}
+              activeOpacity={0.7}
+            >
+              <View style={[styles.quickActionIcon, { backgroundColor: '#f5f3ff' }]}>
+                <MaterialCommunityIcons name="plus-circle" size={28} color="#8b5cf6" />
+              </View>
+              <Text style={styles.quickActionTitle}>Nova Task</Text>
+            </TouchableOpacity>
+          </View>
         </View>
+
+        {/* Card informativo */}
+        <View style={styles.infoCard}>
+          <MaterialCommunityIcons name="information" size={24} color="#4F6AF5" />
+          <View style={styles.infoContent}>
+            <Text style={styles.infoTitle}>Blockchain Seguro</Text>
+            <Text style={styles.infoText}>
+              Todos os seus documentos são protegidos com tecnologia blockchain
+            </Text>
+          </View>
+        </View>
+
+        <View style={{ height: 20 }} />
       </ScrollView>
     </MainLayout>
   );
