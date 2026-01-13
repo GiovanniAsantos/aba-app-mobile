@@ -50,9 +50,9 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
               <Text style={styles.greeting}>Olá, {userInfo?.name || 'Usuário'}! 👋</Text>
               <Text style={styles.subtitle}>Bem-vindo ao Aba Blockchain</Text>
             </View>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.notificationButton}
-              onPress={() => {}}
+              onPress={() => { }}
               activeOpacity={0.7}
             >
               <MaterialCommunityIcons name="bell-outline" size={24} color="#1a1a1a" />
@@ -61,7 +61,7 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
               </View>
             </TouchableOpacity>
           </View>
-          
+
           {userInfo?.selectedEnvironments && (
             <View style={styles.environmentBadge}>
               <MaterialCommunityIcons name="server" size={16} color="#4F6AF5" />
@@ -76,7 +76,7 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
         <View style={styles.statsGrid}>
           {hasBPMS && (
             bpmsIsActive ?
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.statCard}
                 onPress={() => navigation.navigate('BPMS')}
                 activeOpacity={0.7}
@@ -98,7 +98,7 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
           {
             hasSignature && (
               signatureIsActive ? (
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={styles.statCard}
                   onPress={() => navigation.navigate('Assinatura')}
                   activeOpacity={0.7}
@@ -122,7 +122,7 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
           {
             hasCloud && (
               cloudIsActive ? (
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={styles.statCard}
                   onPress={() => navigation.navigate('Cloud')}
                   activeOpacity={0.7}
@@ -145,7 +145,7 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
         </View>
 
         {/* Resumo de atividades recentes */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Atividades Recentes</Text>
             <TouchableOpacity activeOpacity={0.7}>
@@ -185,56 +185,80 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
               <Text style={styles.activityTime}>Há 3 dias</Text>
             </View>
           </View>
-        </View>
+        </View> */}
 
         {/* Ações Rápidas */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Ações Rápidas</Text>
-          
+
           <View style={styles.quickActionsGrid}>
-            <TouchableOpacity 
-              style={styles.quickActionCard}
-              onPress={() => navigation.navigate('Cloud')}
-              activeOpacity={0.7}
-            >
-              <View style={[styles.quickActionIcon, { backgroundColor: '#eff6ff' }]}>
-                <MaterialCommunityIcons name="upload" size={28} color="#4F6AF5" />
-              </View>
-              <Text style={styles.quickActionTitle}>Upload</Text>
-            </TouchableOpacity>
+            {hasCloud && (
+              cloudIsActive ?
+                <TouchableOpacity
+                  style={styles.quickActionCard}
+                  onPress={() => navigation.navigate('Cloud')}
+                  activeOpacity={0.7}
+                >
+                  <View style={[styles.quickActionIcon, { backgroundColor: '#eff6ff' }]}>
+                    <MaterialCommunityIcons name="upload" size={28} color="#4F6AF5" />
+                  </View>
+                  <Text style={styles.quickActionTitle}>Upload</Text>
+                </TouchableOpacity> : <View style={styles.statCardInactive}>
+                  <MaterialCommunityIcons name="file-document" size={24} color="#ccc" />
+                  <Text style={styles.statValueInactive}>Inativo</Text>
+                  <Text style={styles.statLabelInactive}>Cloud</Text>
+                </View>)}
 
-            <TouchableOpacity 
-              style={styles.quickActionCard}
-              onPress={() => navigation.navigate('Assinatura')}
-              activeOpacity={0.7}
-            >
-              <View style={[styles.quickActionIcon, { backgroundColor: '#f0fdf4' }]}>
-                <MaterialCommunityIcons name="file-sign" size={28} color="#10b981" />
-              </View>
-              <Text style={styles.quickActionTitle}>Assinar</Text>
-            </TouchableOpacity>
+            {hasCloud && (
+              cloudIsActive ? <TouchableOpacity
+                style={styles.quickActionCard}
+                onPress={() => navigation.navigate('Cloud')}
+                activeOpacity={0.7}
+              >
+                <View style={[styles.quickActionIcon, { backgroundColor: '#fef3c7' }]}>
+                  <MaterialCommunityIcons name="folder-open" size={28} color="#f59e0b" />
+                </View>
+                <Text style={styles.quickActionTitle}>Arquivos</Text>
+              </TouchableOpacity> : <View style={styles.statCardInactive}>
+                <MaterialCommunityIcons name="file-document" size={24} color="#ccc" />
+                <Text style={styles.statValueInactive}>Inativo</Text>
+                <Text style={styles.statLabelInactive}>Cloud</Text>
+              </View>)}
 
-            <TouchableOpacity 
-              style={styles.quickActionCard}
-              onPress={() => navigation.navigate('Cloud')}
-              activeOpacity={0.7}
-            >
-              <View style={[styles.quickActionIcon, { backgroundColor: '#fef3c7' }]}>
-                <MaterialCommunityIcons name="folder-open" size={28} color="#f59e0b" />
-              </View>
-              <Text style={styles.quickActionTitle}>Arquivos</Text>
-            </TouchableOpacity>
+            {
+              hasSignature && (
+                signatureIsActive ? (<TouchableOpacity
+                  style={styles.quickActionCard}
+                  onPress={() => navigation.navigate('Assinatura')}
+                  activeOpacity={0.7}
+                >
+                  <View style={[styles.quickActionIcon, { backgroundColor: '#f0fdf4' }]}>
+                    <MaterialCommunityIcons name="file-sign" size={28} color="#10b981" />
+                  </View>
+                  <Text style={styles.quickActionTitle}>Assinar</Text>
+                </TouchableOpacity>) : (<View style={styles.statCardInactive}>
+                  <MaterialCommunityIcons name="file-document" size={24} color="#ccc" />
+                  <Text style={styles.statValueInactive}>Inativo</Text></View>)
+              )}
 
-            <TouchableOpacity 
-              style={styles.quickActionCard}
-              onPress={() => navigation.navigate('BPMS')}
-              activeOpacity={0.7}
-            >
-              <View style={[styles.quickActionIcon, { backgroundColor: '#f5f3ff' }]}>
-                <MaterialCommunityIcons name="plus-circle" size={28} color="#8b5cf6" />
-              </View>
-              <Text style={styles.quickActionTitle}>Nova Task</Text>
-            </TouchableOpacity>
+            {hasBPMS && (
+              bpmsIsActive ? <TouchableOpacity
+                style={styles.quickActionCard}
+                onPress={() => navigation.navigate('BPMS')}
+                activeOpacity={0.7}
+              >
+                <View style={[styles.quickActionIcon, { backgroundColor: '#f5f3ff' }]}>
+                  <MaterialCommunityIcons name="plus-circle" size={28} color="#8b5cf6" />
+                </View>
+                <Text style={styles.quickActionTitle}>Nova Task</Text>
+              </TouchableOpacity> : (
+                <View style={styles.statCardInactive}>
+                  <MaterialCommunityIcons name="cog-outline" size={24} color="#ccc" />
+                  <Text style={styles.statValueInactive}>Inativo</Text>
+                  <Text style={styles.statLabelInactive}>BPMS</Text>
+                </View>
+              )
+            )}
           </View>
         </View>
 
@@ -244,7 +268,7 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
           <View style={styles.infoContent}>
             <Text style={styles.infoTitle}>Blockchain Seguro</Text>
             <Text style={styles.infoText}>
-              Todos os seus documentos são protegidos com tecnologia blockchain
+              Nosso processo de assinatura é protegido com tecnologia blockchain
             </Text>
           </View>
         </View>
