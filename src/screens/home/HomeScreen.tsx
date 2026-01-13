@@ -1,58 +1,53 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, Modal } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 import type { NavigationProps } from '../../types/navigation';
 import { MainLayout } from '@/components';
 import { styles } from './style';
 import { useUser } from '@/context/UserProvider';
+import { useAuth } from '@/context/AuthProvider';
+import { apiAccountUrlV1 } from '@/config/api';
+import NotificationModal from '@/components/modalNotification/NotificationModal';
 
 export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
   const { userInfo, loading } = useUser();
+  const { tokens } = useAuth();
   const [notificationModalVisible, setNotificationModalVisible] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
-  const notifications = [
-    {
-      id: 1,
-      title: 'Documento assinado',
-      description: 'Contrato_2024.pdf foi assinado por todos os participantes',
-      time: 'Há 30 minutos',
-      icon: 'file-check',
-      iconColor: '#10b981',
-      iconBg: '#f0fdf4',
-      unread: true,
-    },
-    {
-      id: 2,
-      title: 'Nova tarefa BPMS',
-      description: 'Você tem uma nova tarefa: Aprovação de documento',
-      time: 'Há 2 horas',
-      icon: 'clipboard-check',
-      iconColor: '#4F6AF5',
-      iconBg: '#eff6ff',
-      unread: true,
-    },
-    {
-      id: 3,
-      title: 'Upload concluído',
-      description: 'Relatório_Janeiro.pdf foi enviado com sucesso',
-      time: 'Ontem',
-      icon: 'cloud-check',
-      iconColor: '#10b981',
-      iconBg: '#f0fdf4',
-      unread: true,
-    },
-    {
-      id: 4,
-      title: 'Documento aguardando assinatura',
-      description: 'Proposta_Comercial.pdf precisa da sua assinatura',
-      time: 'Há 3 dias',
-      icon: 'draw',
-      iconColor: '#f59e0b',
-      iconBg: '#fef3c7',
-      unread: false,
-    },
-  ];
+  const loadUnreadCount = async () => {
+    if (!tokens?.accessToken) return;
+
+    try {
+      console.log('🔔 Carregando contador de notificações não lidas');
+      const response = await fetch(`${apiAccountUrlV1}/notifications/unread-count`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${tokens.accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const count = data?.unreadCount || 0;
+        setUnreadCount(count);
+        console.log('✅ Contador atualizado:', count);
+      }
+    } catch (error) {
+      console.error('❌ Erro ao buscar contador de notificações:', error);
+    }
+  };
+
+  // Carrega contador ao focar na tela
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log('📱 Home screen focada - Atualizando notificações');
+      loadUnreadCount();
+    }, [tokens?.accessToken])
+  );
 
   const bpmsService = userInfo?.selectedEnvironments?.services.find(
     (s) => s.typeProduct === "ALLOW_MODULE_BPMS"
@@ -96,13 +91,15 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
             </View>
             <TouchableOpacity
               style={styles.notificationButton}
-              onPress={() => { }}
+              onPress={() => setNotificationModalVisible(true)}
               activeOpacity={0.7}
             >
               <MaterialCommunityIcons name="bell-outline" size={24} color="#1a1a1a" />
-              <View style={styles.notificationBadge}>
-                <Text style={styles.notificationBadgeText}>{notifications.filter(n => n.unread).length}</Text>
-              </View>
+              {unreadCount > 0 && (
+                <View style={styles.notificationBadge}>
+                  <Text style={styles.notificationBadgeText}>{unreadCount}</Text>
+                </View>
+              )}
             </TouchableOpacity>
           </View>
 
@@ -321,73 +318,11 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
       </ScrollView>
 
       {/* Modal de Notificações */}
-      <Modal
+      <NotificationModal
         visible={notificationModalVisible}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => setNotificationModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            {/* Header do Modal */}
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Notificações</Text>
-              <TouchableOpacity
-                onPress={() => setNotificationModalVisible(false)}
-                style={styles.modalCloseButton}
-                activeOpacity={0.7}
-              >
-                <MaterialCommunityIcons name="close" size={24} color="#666" />
-              </TouchableOpacity>
-            </View>
-
-            {/* Lista de Notificações */}
-            <ScrollView style={styles.notificationList} showsVerticalScrollIndicator={false}>
-              {notifications.map((notification) => (
-                <TouchableOpacity
-                  key={notification.id}
-                  style={[
-                    styles.notificationItem,
-                    notification.unread && styles.notificationItemUnread
-                  ]}
-                  activeOpacity={0.7}
-                >
-                  <View style={[styles.notificationIcon, { backgroundColor: notification.iconBg }]}>
-                    <MaterialCommunityIcons
-                      name={notification.icon as any}
-                      size={24}
-                      color={notification.iconColor}
-                    />
-                  </View>
-                  <View style={styles.notificationDetails}>
-                    <View style={styles.notificationTitleRow}>
-                      <Text style={styles.notificationTitle}>{notification.title}</Text>
-                      {notification.unread && <View style={styles.unreadDot} />}
-                    </View>
-                    <Text style={styles.notificationDescription} numberOfLines={2}>
-                      {notification.description}
-                    </Text>
-                    <Text style={styles.notificationTime}>{notification.time}</Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-
-            {/* Footer com ação */}
-            <TouchableOpacity
-              style={styles.markAllReadButton}
-              onPress={() => {
-                // Aqui você pode adicionar lógica para marcar todas como lidas
-                setNotificationModalVisible(false);
-              }}
-              activeOpacity={0.7}
-            >
-              <MaterialCommunityIcons name="check-all" size={20} color="#4F6AF5" />
-              <Text style={styles.markAllReadText}>Marcar todas como lidas</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+        onClose={() => setNotificationModalVisible(false)}
+        onRefresh={loadUnreadCount}
+      />
     </MainLayout>
   );
 }
