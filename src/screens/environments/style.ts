@@ -486,6 +486,22 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#dc2626',
   },
+  cancelButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    paddingVertical: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#dc2626',
+    gap: 6,
+  },
+  cancelButtonText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#dc2626',
+  },
 
   // Empty State
   emptyState: {
