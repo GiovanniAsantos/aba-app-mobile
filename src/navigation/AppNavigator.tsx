@@ -9,7 +9,7 @@ import ProfileScreen from '@/screens/profile/ProfileScreen';
 import EditProfileScreen from '@/screens/profile/EditProfileScreen';
 import AssinaturaScreen from '@/screens/assinatura/AssinaturaScreen';
 import BPMSScreen from '@/screens/bpms/BPMSScreen';
-import CloudScreen from '@/screens/cloud/CloudScreen';
+import CloudScreen from '@/screens/cloud/cloudTableScreen/CloudScreen';
 import EnvironmentsScreen from '@/screens/environments/EnvironmentsScreen';
 import SignDocumentScreen from '@/screens/assinatura/signDocument';
 import SeeSignatureScreen from '@/screens/assinatura/seeSignature';
