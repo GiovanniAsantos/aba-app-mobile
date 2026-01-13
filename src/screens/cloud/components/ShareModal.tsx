@@ -480,83 +480,146 @@ export default function ShareModal({ visible, onClose, item }: ShareModalProps) 
   );
 
   const renderLinkExists = () => (
-    <View>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      {/* Card do Link */}
       <View style={{ 
-        backgroundColor: '#f0f9ff',
-        borderRadius: 8,
-        padding: 16,
-        marginBottom: 16,
+        backgroundColor: '#f8fafc',
+        borderRadius: 16,
+        padding: 20,
+        marginBottom: 20,
         borderWidth: 1,
-        borderColor: '#bae6fd',
+        borderColor: '#e2e8f0',
       }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 14 }}>
-          <Text style={{ fontSize: 14, color: '#0369a1', fontWeight: '600' }}>Informações do Link</Text>
-        </View>
-
-        <View style={{ marginBottom: 14 }}>
-          <Text style={{ fontSize: 12, color: '#6b7280', marginBottom: 6 }}>Status do Link</Text>
+        {/* Status Badge */}
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 16,
+        }}>
+          <Text style={{ fontSize: 13, fontWeight: '600', color: '#64748b', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+            Status
+          </Text>
           <View style={{
-            paddingHorizontal: 10,
+            paddingHorizontal: 12,
             paddingVertical: 6,
-            borderRadius: 6,
+            borderRadius: 20,
             backgroundColor: linkInfo?.active ? '#dcfce7' : '#fee2e2',
-            alignSelf: 'flex-start',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 6,
           }}>
+            <View style={{
+              width: 6,
+              height: 6,
+              borderRadius: 3,
+              backgroundColor: linkInfo?.active ? '#16a34a' : '#dc2626',
+            }} />
             <Text style={{ 
-              fontSize: 13, 
+              fontSize: 12, 
               color: linkInfo?.active ? '#15803d' : '#dc2626',
               fontWeight: '600',
             }}>
-              {linkInfo?.active ? '● Ativo' : '● Desativado'}
+              {linkInfo?.active ? 'Ativo' : 'Desativado'}
             </Text>
           </View>
         </View>
 
-        <View style={{ marginBottom: 14 }}>
-          <Text style={{ fontSize: 12, color: '#6b7280', marginBottom: 6 }}>Expiração</Text>
-          <Text style={{ fontSize: 14, fontWeight: '600', color: '#1a1a1a' }}>
+        {/* Data de Expiração */}
+        <View style={{ 
+          backgroundColor: '#fff',
+          borderRadius: 12,
+          padding: 14,
+          marginBottom: 16,
+          borderLeftWidth: 3,
+          borderLeftColor: '#4F6AF5',
+        }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}>
+            <MaterialCommunityIcons name="calendar-clock" size={18} color="#4F6AF5" />
+            <Text style={{ fontSize: 12, color: '#64748b', marginLeft: 8, fontWeight: '600' }}>
+              EXPIRAÇÃO
+            </Text>
+          </View>
+          <Text style={{ fontSize: 15, fontWeight: '600', color: '#1e293b', marginLeft: 26 }}>
             {formatExpirationDate(linkInfo?.timeExpiration)}
           </Text>
         </View>
 
-        <View style={{ 
-          flexDirection: 'row',
-          backgroundColor: '#fff',
-          borderRadius: 6,
-          borderWidth: 1,
-          borderColor: '#d1d5db',
-          overflow: 'hidden',
-        }}>
-          <TextInput
-            style={{
-              flex: 1,
-              padding: 12,
-              fontSize: 13,
-              color: '#374151',
-            }}
-            value={linkInfo?.link && linkInfo?.schema ? `${linkInfo.link}/${linkInfo.schema}` : linkInfo?.link || ''}
-            editable={false}
-          />
-          <TouchableOpacity
-            style={{
-              paddingHorizontal: 14,
-              justifyContent: 'center',
-              backgroundColor: '#4F6AF5',
-            }}
-            onPress={handleCopyLink}
-          >
-            <MaterialCommunityIcons name="content-copy" size={18} color="#fff" />
-          </TouchableOpacity>
+        {/* Campo do Link */}
+        <View style={{ marginBottom: 12 }}>
+          <Text style={{ fontSize: 12, color: '#64748b', marginBottom: 8, fontWeight: '600' }}>
+            LINK DE COMPARTILHAMENTO
+          </Text>
+          <View style={{ 
+            flexDirection: 'row',
+            backgroundColor: '#fff',
+            borderRadius: 10,
+            borderWidth: 1,
+            borderColor: '#cbd5e1',
+            overflow: 'hidden',
+          }}>
+            <TextInput
+              style={{
+                flex: 1,
+                paddingHorizontal: 14,
+                paddingVertical: 12,
+                fontSize: 13,
+                color: '#475569',
+                fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
+              }}
+              value={linkInfo?.link && linkInfo?.schema ? `${linkInfo.link}/${linkInfo.schema}` : linkInfo?.link || ''}
+              editable={false}
+              numberOfLines={1}
+            />
+            <TouchableOpacity
+              style={{
+                paddingHorizontal: 16,
+                justifyContent: 'center',
+                backgroundColor: '#4F6AF5',
+              }}
+              onPress={handleCopyLink}
+              activeOpacity={0.8}
+            >
+              <MaterialCommunityIcons name="content-copy" size={18} color="#fff" />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
 
-      <View style={{ gap: 10 }}>
+        {/* Botão Copiar Link Grande */}
         <TouchableOpacity
           style={{
             backgroundColor: '#4F6AF5',
-            padding: 16,
-            borderRadius: 8,
+            paddingVertical: 14,
+            borderRadius: 10,
             alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            shadowColor: '#4F6AF5',
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.3,
+            shadowRadius: 8,
+            elevation: 4,
+          }}
+          onPress={handleCopyLink}
+          activeOpacity={0.8}
+        >
+          <MaterialCommunityIcons name="content-copy" size={18} color="#fff" />
+          <Text style={{ color: '#fff', fontSize: 15, fontWeight: '600', marginLeft: 8 }}>
+            Copiar Link
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Botões de Ação */}
+      <View style={{ gap: 12 }}>
+        <TouchableOpacity
+          style={{
+            backgroundColor: '#fff',
+            paddingVertical: 14,
+            borderRadius: 10,
+            alignItems: 'center',
+            borderWidth: 1.5,
+            borderColor: '#4F6AF5',
             flexDirection: 'row',
             justifyContent: 'center',
           }}
@@ -564,119 +627,200 @@ export default function ShareModal({ visible, onClose, item }: ShareModalProps) 
             setDuration(linkInfo?.timeExpiration ? 1440 : 1);
             setEditMode(true);
           }}
+          activeOpacity={0.7}
         >
-          <MaterialCommunityIcons name="pencil" size={18} color="#fff" />
-          <Text style={{ color: '#fff', fontSize: 15, fontWeight: '600', marginLeft: 8 }}>
-            Editar Link
+          <MaterialCommunityIcons name="pencil" size={18} color="#4F6AF5" />
+          <Text style={{ color: '#4F6AF5', fontSize: 15, fontWeight: '600', marginLeft: 8 }}>
+            Editar Configurações
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={{
             backgroundColor: '#fff',
-            padding: 16,
-            borderRadius: 8,
+            paddingVertical: 14,
+            borderRadius: 10,
             alignItems: 'center',
-            borderWidth: 1,
+            borderWidth: 1.5,
             borderColor: '#ef4444',
             flexDirection: 'row',
             justifyContent: 'center',
           }}
           onPress={handleDeleteLink}
+          activeOpacity={0.7}
         >
-          <MaterialCommunityIcons name="delete" size={18} color="#ef4444" />
+          <MaterialCommunityIcons name="delete-outline" size={18} color="#ef4444" />
           <Text style={{ color: '#ef4444', fontSize: 15, fontWeight: '600', marginLeft: 8 }}>
             Excluir Link
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 
   const renderCreateLink = () => (
-    <View>
-      <Text style={{ fontSize: 14, fontWeight: '600', marginBottom: 12, color: '#1a1a1a' }}>
-        Selecione a duração do link
+    <ScrollView showsVerticalScrollIndicator={false} style={{ maxHeight: 500 }}>
+      {/* Informação Inicial */}
+      <View style={{
+        backgroundColor: '#f0f9ff',
+        borderRadius: 12,
+        padding: 16,
+        marginBottom: 20,
+        borderLeftWidth: 4,
+        borderLeftColor: '#4F6AF5',
+      }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <MaterialCommunityIcons name="information" size={20} color="#4F6AF5" />
+          <Text style={{ 
+            fontSize: 13, 
+            color: '#1e40af',
+            marginLeft: 10,
+            flex: 1,
+            fontWeight: '500',
+          }}>
+            Crie um link seguro para compartilhar este arquivo
+          </Text>
+        </View>
+      </View>
+
+      <Text style={{ 
+        fontSize: 13, 
+        fontWeight: '600', 
+        marginBottom: 12, 
+        color: '#64748b',
+        textTransform: 'uppercase',
+        letterSpacing: 0.5,
+      }}>
+        Duração do Link
       </Text>
       
-      <View style={{ gap: 8, marginBottom: 20 }}>
-        {([1, 10, 20, 30, 60, 240, 720, 1440, 10080, 44640] as LinkDuration[]).map((dur) => (
+      <View style={{ gap: 10, marginBottom: 20 }}>
+        {([1, 60, 240, 720, 1440, 10080, 44640] as LinkDuration[]).map((dur) => (
           <TouchableOpacity
             key={dur}
             style={{
-              padding: 14,
-              borderRadius: 8,
+              padding: 16,
+              borderRadius: 12,
               borderWidth: 2,
-              borderColor: duration === dur ? '#4F6AF5' : '#e5e7eb',
+              borderColor: duration === dur ? '#4F6AF5' : '#e2e8f0',
               backgroundColor: duration === dur ? '#eff6ff' : '#fff',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
             }}
             onPress={() => setDuration(dur)}
+            activeOpacity={0.7}
           >
-            <Text style={{ 
-              fontSize: 14,
-              fontWeight: duration === dur ? '600' : '400',
-              color: duration === dur ? '#1e40af' : '#374151',
-            }}>
-              {getDurationLabel(dur)}
-            </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+              <View style={{
+                width: 20,
+                height: 20,
+                borderRadius: 10,
+                borderWidth: 2,
+                borderColor: duration === dur ? '#4F6AF5' : '#cbd5e1',
+                backgroundColor: duration === dur ? '#4F6AF5' : 'transparent',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+                {duration === dur && (
+                  <View style={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: 4,
+                    backgroundColor: '#fff',
+                  }} />
+                )}
+              </View>
+              <Text style={{ 
+                fontSize: 15,
+                fontWeight: duration === dur ? '600' : '400',
+                color: duration === dur ? '#1e40af' : '#475569',
+              }}>
+                {getDurationLabel(dur)}
+              </Text>
+            </View>
+            {duration === dur && (
+              <MaterialCommunityIcons name="check" size={20} color="#4F6AF5" />
+            )}
           </TouchableOpacity>
         ))}
       </View>
 
+      {/* Prévia da Expiração */}
       {duration !== null && (
         <View style={{
-          backgroundColor: duration === 1 ? '#f0f9ff' : '#fff7ed',
-          borderRadius: 8,
-          padding: 14,
-          marginBottom: 20,
-          borderLeftWidth: 3,
-          borderLeftColor: duration === 1 ? '#0ea5e9' : '#f59e0b',
+          backgroundColor: duration === 1 ? '#f0fdf4' : '#fff7ed',
+          borderRadius: 12,
+          padding: 16,
+          marginBottom: 24,
+          borderLeftWidth: 4,
+          borderLeftColor: duration === 1 ? '#10b981' : '#f59e0b',
         }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <MaterialCommunityIcons 
-              name="information" 
-              size={18} 
-              color={duration === 1 ? '#0ea5e9' : '#f59e0b'} 
+              name={duration === 1 ? "check-circle" : "clock-alert-outline"} 
+              size={20} 
+              color={duration === 1 ? '#10b981' : '#f59e0b'} 
             />
-            <Text style={{ 
-              fontSize: 13, 
-              color: '#374151',
-              marginLeft: 10,
-              flex: 1,
-            }}>
-              {duration === 1 
-                ? 'O link será válido indefinidamente' 
-                : `O link expirará em ${getDurationLabel(duration)}`
-              }
-            </Text>
+            <View style={{ marginLeft: 12, flex: 1 }}>
+              <Text style={{ 
+                fontSize: 12, 
+                color: '#64748b',
+                fontWeight: '600',
+                marginBottom: 2,
+              }}>
+                {duration === 1 ? 'LINK PERMANENTE' : 'EXPIRA EM'}
+              </Text>
+              <Text style={{ 
+                fontSize: 14, 
+                fontWeight: '600',
+                color: duration === 1 ? '#15803d' : '#ea580c',
+              }}>
+                {duration === 1 
+                  ? 'Válido indefinidamente' 
+                  : (() => {
+                      const expirationDate = new Date();
+                      expirationDate.setMinutes(expirationDate.getMinutes() + duration);
+                      return formatExpirationDate(expirationDate.toISOString());
+                    })()
+                }
+              </Text>
+            </View>
           </View>
         </View>
       )}
 
+      {/* Botão Criar */}
       <TouchableOpacity
         style={{
           backgroundColor: '#4F6AF5',
-          padding: 16,
-          borderRadius: 8,
+          paddingVertical: 16,
+          borderRadius: 12,
           alignItems: 'center',
           flexDirection: 'row',
           justifyContent: 'center',
+          shadowColor: '#4F6AF5',
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.3,
+          shadowRadius: 8,
+          elevation: 4,
         }}
         onPress={handleCreateLink}
         disabled={loading}
+        activeOpacity={0.8}
       >
         {loading ? (
           <ActivityIndicator size="small" color="#fff" />
         ) : (
           <>
-            <MaterialCommunityIcons name="link-variant" size={18} color="#fff" />
-            <Text style={{ color: '#fff', fontSize: 16, fontWeight: '600', marginLeft: 8 }}>
-              Criar Link
+            <MaterialCommunityIcons name="link-variant" size={20} color="#fff" />
+            <Text style={{ color: '#fff', fontSize: 16, fontWeight: '700', marginLeft: 10 }}>
+              Criar Link de Compartilhamento
             </Text>
           </>
         )}
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 
   return (
@@ -686,31 +830,73 @@ export default function ShareModal({ visible, onClose, item }: ShareModalProps) 
       animationType="slide"
       onRequestClose={onClose}
     >
-      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ 
+        flex: 1, 
+        backgroundColor: 'rgba(0,0,0,0.6)', 
+        justifyContent: 'flex-end',
+      }}>
         <View style={{ 
           backgroundColor: '#fff', 
-          borderRadius: 12, 
-          padding: 20, 
-          width: '90%', 
-          maxWidth: 500,
-          maxHeight: '85%',
+          borderTopLeftRadius: 24,
+          borderTopRightRadius: 24,
+          padding: 24, 
+          maxHeight: '90%',
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: -4 },
+          shadowOpacity: 0.15,
+          shadowRadius: 12,
+          elevation: 8,
         }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-            <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 18, fontWeight: '600', color: '#1a1a1a' }}>
-                {editMode ? 'Editar Link de Compartilhamento' : 'Compartilhar Link'}
+          {/* Header do Modal */}
+          <View style={{ 
+            flexDirection: 'row', 
+            justifyContent: 'space-between', 
+            alignItems: 'flex-start', 
+            marginBottom: 24,
+            paddingBottom: 16,
+            borderBottomWidth: 1,
+            borderBottomColor: '#f3f4f6',
+          }}>
+            <View style={{ flex: 1, paddingRight: 16 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}>
+                <View style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 12,
+                  backgroundColor: '#eff6ff',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginRight: 12,
+                }}>
+                  <MaterialCommunityIcons name="share-variant" size={22} color="#4F6AF5" />
+                </View>
+                <Text style={{ fontSize: 20, fontWeight: '700', color: '#1a1a1a' }}>
+                  {editMode ? 'Editar Link' : hasLink ? 'Link Ativo' : 'Compartilhar'}
+                </Text>
+              </View>
+              <Text style={{ fontSize: 14, color: '#6b7280', marginLeft: 52 }} numberOfLines={1}>
+                {item?.name}
               </Text>
-              <Text style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>{item?.name}</Text>
             </View>
-            <TouchableOpacity onPress={onClose}>
-              <MaterialCommunityIcons name="close" size={24} color="#1a1a1a" />
+            <TouchableOpacity 
+              onPress={onClose}
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 18,
+                backgroundColor: '#f3f4f6',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <MaterialCommunityIcons name="close" size={20} color="#6b7280" />
             </TouchableOpacity>
           </View>
 
           {loading && !editMode ? (
-            <View style={{ padding: 40, alignItems: 'center' }}>
+            <View style={{ padding: 60, alignItems: 'center' }}>
               <ActivityIndicator size="large" color="#4F6AF5" />
-              <Text style={{ marginTop: 12, color: '#6b7280' }}>Carregando...</Text>
+              <Text style={{ marginTop: 16, color: '#6b7280', fontSize: 14 }}>Carregando informações...</Text>
             </View>
           ) : editMode ? (
             renderEditMode()
