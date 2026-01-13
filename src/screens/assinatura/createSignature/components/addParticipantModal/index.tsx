@@ -39,9 +39,28 @@ export function AddParticipantModal({
   const [externalName, setExternalName] = useState('');
   const [externalCpf, setExternalCpf] = useState('');
   const [externalEmail, setExternalEmail] = useState('');
+  const [externalSearchText, setExternalSearchText] = useState('');
 
   const handleSearch = async (text: string) => {
     setSearchText(text);
+    if (text.length >= 3) {
+      setLoading(true);
+      try {
+        const results = await onSearchUsers(text);
+        setSearchResults(results);
+      } catch (error) {
+        console.error('Erro ao buscar usuários:', error);
+        Alert.alert('Erro', 'Não foi possível buscar usuários. Verifique sua conexão.');
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      setSearchResults([]);
+    }
+  };
+
+  const handleExternalSearch = async (text: string) => {
+    setExternalSearchText(text);
     if (text.length >= 3) {
       setLoading(true);
       try {
@@ -102,6 +121,7 @@ export function AddParticipantModal({
     setExternalName('');
     setExternalCpf('');
     setExternalEmail('');
+    setExternalSearchText('');
     setActiveTab('internal');
   };
 
@@ -252,81 +272,121 @@ export function AddParticipantModal({
               </View>
             ) : (
               <View>
-                <View style={{ marginBottom: 12, padding: 12, backgroundColor: '#f0f9ff', borderRadius: 8 }}>
-                  <Text style={{ fontSize: 12, color: '#0369a1' }}>
-                    💡 Busque ou preencha os dados do participante externo
+                <View style={{ marginBottom: 12, padding: 12, backgroundColor: '#f0f9ff', borderRadius: 8, borderLeftWidth: 3, borderLeftColor: '#0369a1' }}>
+                  <Text style={{ fontSize: 12, color: '#0369a1', fontWeight: '500' }}>
+                    💡 Busque por nome ou CPF para autocompletar os dados se o usuário já foi cadastrado anteriormente
                   </Text>
                 </View>
                 
                 <Input
-                  label="Buscar por nome ou CPF"
-                  value={searchText}
-                  onChangeText={handleSearch}
-                  placeholder="Digite para buscar..."
+                  label="🔍 Buscar usuário existente"
+                  value={externalSearchText}
+                  onChangeText={handleExternalSearch}
+                  placeholder="Digite nome ou CPF para buscar..."
                 />
 
                 {loading && (
-                  <Text style={{ textAlign: 'center', color: '#666', marginTop: 16 }}>
-                    Buscando...
-                  </Text>
+                  <View style={{ marginTop: 16, padding: 12, alignItems: 'center' }}>
+                    <Text style={{ color: '#666' }}>Buscando...</Text>
+                  </View>
+                )}
+
+                {!loading && externalSearchText.length >= 3 && searchResults.length === 0 && (
+                  <View style={{ marginTop: 16, padding: 12, backgroundColor: '#fef3c7', borderRadius: 8, borderLeftWidth: 3, borderLeftColor: '#f59e0b' }}>
+                    <Text style={{ fontSize: 12, color: '#92400e', fontWeight: '500' }}>
+                      ℹ️ Nenhum usuário encontrado. Preencha os dados manualmente abaixo.
+                    </Text>
+                  </View>
                 )}
 
                 {searchResults.length > 0 && (
                   <View style={{ marginTop: 16, marginBottom: 16 }}>
                     <Text style={{ fontSize: 12, fontWeight: '600', color: '#666', marginBottom: 8 }}>
-                      Resultados encontrados:
+                      📋 Usuários encontrados - Clique para preencher:
                     </Text>
-                    {searchResults.map((user) => (
-                      <TouchableOpacity
-                        key={user.id}
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          padding: 12,
-                          backgroundColor: '#f9f9f9',
-                          borderRadius: 8,
-                          marginBottom: 8,
-                        }}
-                        onPress={() => {
-                          setExternalName(user.name.split(' - ')[0]);
-                          setExternalCpf(formatCPF(user.numberDocument));
-                          setExternalEmail(user.email || user.contact || '');
-                          setSearchText('');
-                          setSearchResults([]);
-                        }}
-                      >
-                        <View
+                    {searchResults.map((user) => {
+                      // Identificar se é usuário interno (tem accountId) ou externo
+                      const isInternal = !!user.id;
+                      return (
+                        <TouchableOpacity
+                          key={user.id || user.numberDocument}
                           style={{
-                            width: 40,
-                            height: 40,
-                            borderRadius: 20,
-                            backgroundColor: '#10b981',
+                            flexDirection: 'row',
                             alignItems: 'center',
-                            justifyContent: 'center',
+                            padding: 12,
+                            backgroundColor: isInternal ? '#eff6ff' : '#f0fdf4',
+                            borderRadius: 8,
+                            marginBottom: 8,
+                            borderWidth: 1,
+                            borderColor: isInternal ? '#3b82f6' : '#10b981',
+                          }}
+                          onPress={() => {
+                            setExternalName(user.name.split(' - ')[0]);
+                            setExternalCpf(formatCPF(user.numberDocument));
+                            setExternalEmail(user.email || user.contact || '');
+                            setExternalSearchText('');
+                            setSearchResults([]);
+                            Alert.alert(
+                              'Dados preenchidos!',
+                              'Os dados foram preenchidos automaticamente. Revise e clique em "Adicionar Participante Externo".',
+                              [{ text: 'OK' }]
+                            );
                           }}
                         >
-                          <Text style={{ color: '#fff', fontWeight: '600' }}>
-                            {user.name.charAt(0).toUpperCase()}
-                          </Text>
-                        </View>
-                        <View style={{ flex: 1, marginLeft: 12 }}>
-                          <Text style={{ fontSize: 14, fontWeight: '500' }}>
-                            {user.name}
-                          </Text>
-                          <Text style={{ fontSize: 12, color: '#666' }}>
-                            {user.numberDocument}
-                          </Text>
-                        </View>
-                        <MaterialCommunityIcons
-                          name="check-circle"
-                          size={24}
-                          color="#10b981"
-                        />
-                      </TouchableOpacity>
-                    ))}
+                          <View
+                            style={{
+                              width: 40,
+                              height: 40,
+                              borderRadius: 20,
+                              backgroundColor: isInternal ? '#3b82f6' : '#10b981',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}
+                          >
+                            <Text style={{ color: '#fff', fontWeight: '600' }}>
+                              {user.name.charAt(0).toUpperCase()}
+                            </Text>
+                          </View>
+                          <View style={{ flex: 1, marginLeft: 12 }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                              <Text style={{ fontSize: 14, fontWeight: '500' }}>
+                                {user.name}
+                              </Text>
+                              {!isInternal && (
+                                <View style={{ backgroundColor: '#10b981', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 }}>
+                                  <Text style={{ color: '#fff', fontSize: 9, fontWeight: '600' }}>EXTERNO</Text>
+                                </View>
+                              )}
+                            </View>
+                            <Text style={{ fontSize: 12, color: '#666', marginTop: 2 }}>
+                              CPF: {user.numberDocument}
+                            </Text>
+                            {(user.email || user.contact) && (
+                              <Text style={{ fontSize: 11, color: '#888', marginTop: 1 }}>
+                                {user.email || user.contact}
+                              </Text>
+                            )}
+                          </View>
+                          <MaterialCommunityIcons
+                            name="check-circle"
+                            size={24}
+                            color={isInternal ? '#3b82f6' : '#10b981'}
+                          />
+                        </TouchableOpacity>
+                      );
+                    })}
                   </View>
                 )}
                 
+                {/* Separador visual */}
+                <View style={{ marginVertical: 20, flexDirection: 'row', alignItems: 'center' }}>
+                  <View style={{ flex: 1, height: 1, backgroundColor: '#e5e7eb' }} />
+                  <Text style={{ marginHorizontal: 12, fontSize: 12, color: '#6b7280', fontWeight: '600' }}>
+                    OU PREENCHA MANUALMENTE
+                  </Text>
+                  <View style={{ flex: 1, height: 1, backgroundColor: '#e5e7eb' }} />
+                </View>
+
                 <View style={{ marginTop: 16 }}>
                   <Input
                     label="Nome completo"

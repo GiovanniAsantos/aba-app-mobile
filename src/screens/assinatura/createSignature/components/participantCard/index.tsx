@@ -13,7 +13,7 @@ interface ParticipantCardProps {
   onUpdateType: (value: string, groupIndex: number, participantIndex: number) => void;
   onUpdateValidation: (value: string, groupIndex: number, participantIndex: number) => void;
   onUpdateValidationICP: (value: string, groupIndex: number, participantIndex: number) => void;
-  onEditPosition: (participant: Participant) => void;
+  onEditPosition: () => void; // Não precisa mais passar participante
   hasDocuments: boolean;
   onMoveUp?: (groupIndex: number, participantIndex: number) => void;
   onMoveDown?: (groupIndex: number, participantIndex: number) => void;
@@ -36,6 +36,7 @@ export function ParticipantCard({
   canMoveUp = false,
   canMoveDown = false,
 }: ParticipantCardProps) {
+  console.log("🚀 ~ ParticipantCard ~ participant:", participant)
   const [expanded, setExpanded] = useState(false);
 
   const participantTypeOptions = [
@@ -58,6 +59,11 @@ export function ParticipantCard({
     { label: 'Por Senha de Usuário', value: 'POR_SENHA' },
     { label: 'ICP-Brasil (Certificado Digital)', value: 'ICP_BRASIL' },
   ];
+
+  const validationTypeForExternalParticipant = [
+    { label: 'Por Token (E-mail/SMS)', value: 'POR_TOKEN' },
+    { label: 'ICP-Brasil (Certificado Digital)', value: 'ICP_BRASIL' },
+  ]
 
   const icpValidationOptions = [
     { label: 'CPF', value: 'CPF' },
@@ -98,11 +104,6 @@ export function ParticipantCard({
       .replace(/(-\d{2})\d+?$/, '$1');
   };
 
-  const getParticipantTypeName = (type: string) => {
-    const option = participantTypeOptions.find((opt) => opt.value === type);
-    return option?.label || type;
-  };
-
   const hasPositionDefined = participant.signaturePosition?.positionDefined;
   const hasPositionConfirmed = participant.signaturePosition?.docsAndPosition?.some(
     (pos) => pos.positionConfirmed
@@ -113,14 +114,14 @@ export function ParticipantCard({
       <View style={styles.participantHeader}>
         {(onMoveUp || onMoveDown) && (
           <View style={{ marginRight: 8, gap: 4 }}>
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => onMoveUp?.(groupIndex, participantIndex)}
               disabled={!canMoveUp}
               style={{ opacity: canMoveUp ? 1 : 0.3 }}
             >
               <MaterialCommunityIcons name="chevron-up" size={20} color="#666" />
             </TouchableOpacity>
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => onMoveDown?.(groupIndex, participantIndex)}
               disabled={!canMoveDown}
               style={{ opacity: canMoveDown ? 1 : 0.3 }}
@@ -200,7 +201,7 @@ export function ParticipantCard({
                       participantIndex
                     )
                   }
-                  options={validationTypeOptions}
+                  options={participant.accountId ? validationTypeOptions : validationTypeForExternalParticipant}
                 />
               </View>
 
@@ -234,7 +235,7 @@ export function ParticipantCard({
               </Text>
               <TouchableOpacity
                 style={styles.participantPositionButton}
-                onPress={() => onEditPosition(participant)}
+                onPress={onEditPosition}
               >
                 <MaterialCommunityIcons
                   name="draw"

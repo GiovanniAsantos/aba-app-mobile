@@ -398,6 +398,7 @@ export default function EnvironmentsScreen({ navigation }: NavigationProps<'Envi
             </View>
           )}
           <View style={{ height: 40 }} />
+          </View>
         </View>
       </ScrollView>
     </MainLayout>

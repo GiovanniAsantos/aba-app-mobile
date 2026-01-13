@@ -12,7 +12,7 @@ interface GroupCardProps {
   onUpdateParticipantType: (value: string, groupIndex: number, participantIndex: number) => void;
   onUpdateValidation: (value: string, groupIndex: number, participantIndex: number) => void;
   onUpdateValidationICP: (value: string, groupIndex: number, participantIndex: number) => void;
-  onEditPosition: (participant: Participant) => void;
+  onEditPosition: () => void; // Não precisa mais passar participante
   onMoveParticipantUp: (groupIndex: number, participantIndex: number) => void;
   onMoveParticipantDown: (groupIndex: number, participantIndex: number) => void;
   onRemoveGroup: (groupIndex: number) => void;
@@ -79,13 +79,13 @@ export function GroupCard({
         </View>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.groupRuleBadge}
             onPress={() => onSelectRule(groupIndex)}
           >
             <MaterialCommunityIcons name="cog" size={14} color="#fff" />
             <Text style={styles.groupRuleText}>{getRuleLabel()}</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           
           {group.participants.length === 0 && (
             <TouchableOpacity onPress={() => onRemoveGroup(groupIndex)}>

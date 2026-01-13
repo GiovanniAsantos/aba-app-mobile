@@ -66,6 +66,20 @@ const CreateSignature = () => {
     setOrderingEnabled(false);
   };
 
+  // Obter todos os signatários (para editor de posição)
+  const allSignatories = React.useMemo(() => {
+    const allParticipants = orderingEnabled
+      ? groupsSignature.flatMap((g) => g.participants)
+      : participants;
+    
+    return allParticipants.filter(
+      (p) =>
+        p.titleParticipant === 'SIGNATARIO' ||
+        p.titleParticipant === 'SIGNATARIO_1' ||
+        p.titleParticipant === 'SIGNATARIO_2'
+    );
+  }, [orderingEnabled, groupsSignature, participants]);
+
   const createNewGroup = () => {
     const newGroup: SignatureGroup = {
       participants: [],
@@ -136,7 +150,7 @@ const CreateSignature = () => {
   const searchUsers = async (text: string): Promise<SearchedUser[]> => {
     try {
       const response = await fetch(
-        `${apiSignatureUrlV1}/accounts/search?name=${text}`,
+        `${apiSignatureUrlV1}/signatures/participants/search?name=${text}`,
         {
           headers: {
             Authorization: `Bearer ${tokens?.accessToken}`,
@@ -361,28 +375,27 @@ const CreateSignature = () => {
     }
   };
 
-  const handleEditPosition = (participant: Participant) => {
-    setSelectedParticipant(participant);
+  const handleEditPosition = () => {
     setShowPositionEditor(true);
   };
 
-  const handleSavePosition = (
-    updatedParticipant: Participant,
-    positions: SignaturePosition[]
-  ) => {
+  const handleSaveAllPositions = (updatedParticipants: Participant[]) => {
     if (orderingEnabled) {
       const updatedGroups = groupsSignature.map((group) => ({
         ...group,
-        participants: group.participants.map((p) =>
-          p.idTemp === updatedParticipant.idTemp ? updatedParticipant : p
-        ),
+        participants: group.participants.map((p) => {
+          const updated = updatedParticipants.find((up) => up.idTemp === p.idTemp);
+          return updated || p;
+        }),
       }));
       setGroupsSignature(updatedGroups);
     } else {
-      const updatedParticipants = participants.map((p) =>
-        p.idTemp === updatedParticipant.idTemp ? updatedParticipant : p
-      );
-      setParticipants(updatedParticipants);
+      // Atualizar lista simples de participantes
+      const newParticipants = participants.map((p) => {
+        const updated = updatedParticipants.find((up) => up.idTemp === p.idTemp);
+        return updated || p;
+      });
+      setParticipants(newParticipants);
     }
   };
 
@@ -763,13 +776,12 @@ const CreateSignature = () => {
 
       <SignaturePositionEditor
         visible={showPositionEditor}
-        participant={selectedParticipant}
+        allParticipants={allSignatories}
         documents={documents}
         onClose={() => {
           setShowPositionEditor(false);
-          setSelectedParticipant(null);
         }}
-        onSave={handleSavePosition}
+        onSaveAll={handleSaveAllPositions}
       />
 
       <RuleSelectModal

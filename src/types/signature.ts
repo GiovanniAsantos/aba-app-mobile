@@ -60,6 +60,7 @@ export interface SignatureDocument {
   name: string;
   type?: string;
   format?: string;
+  cloudDocumentUuid?: string; // UUID do documento na nuvem
   fileProps?: {
     key: string;
     bucket?: string;
