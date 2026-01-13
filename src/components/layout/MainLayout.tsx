@@ -205,10 +205,10 @@ export default function MainLayout({ children, navigation }: MainLayoutProps) {
         <TouchableOpacity 
           style={styles.bottomButton} 
           activeOpacity={0.7}
-          onPress={() => navigation?.navigate('Home')}
+          onPress={() => navigation?.navigate('BPMS')}
         >
-          <MaterialCommunityIcons name="home" size={24} color="#666" />
-          <Text style={styles.bottomButtonText}>Início</Text>
+          <MaterialCommunityIcons name="sitemap" size={24} color="#666" />
+          <Text style={styles.bottomButtonText}>BPMS</Text>
         </TouchableOpacity>
 
         <TouchableOpacity 
@@ -222,11 +222,11 @@ export default function MainLayout({ children, navigation }: MainLayoutProps) {
 
         <TouchableOpacity
           style={styles.bottomButtonMenu}
-          onPress={isMenuOpen ? closeMenu : openMenu}
+          onPress={() => navigation?.navigate('Home')}
           activeOpacity={0.9}
         >
           <View style={styles.menuButtonCircle}>
-            <MaterialCommunityIcons name="menu" size={28} color="#fff" />
+            <MaterialCommunityIcons name="home" size={28} color="#fff" />
           </View>
         </TouchableOpacity>
 
@@ -242,10 +242,10 @@ export default function MainLayout({ children, navigation }: MainLayoutProps) {
         <TouchableOpacity 
           style={styles.bottomButton} 
           activeOpacity={0.7}
-          onPress={() => navigation?.navigate('Profile')}
+          onPress={isMenuOpen ? closeMenu : openMenu}
         >
-          <MaterialCommunityIcons name="account" size={24} color="#666" />
-          <Text style={styles.bottomButtonText}>Perfil</Text>
+          <MaterialCommunityIcons name="menu" size={24} color="#666" />
+          <Text style={styles.bottomButtonText}>Menu</Text>
         </TouchableOpacity>
       </View>
     </View>
