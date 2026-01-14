@@ -6,6 +6,7 @@ import type { NavigationProps } from '../../types/navigation';
 import { MainLayout } from '@/components';
 import { AssociatedEnvironments, RequestAccess } from './components';
 import { styles } from './style';
+import PageHeader from '@/components/layout/PageHeader';
 
 export default function EnvironmentsScreen({ navigation }: NavigationProps<'Environments'>) {
   const [activeTab, setActiveTab] = useState<'associados' | 'solicitar'>('associados');
@@ -15,18 +16,14 @@ export default function EnvironmentsScreen({ navigation }: NavigationProps<'Envi
     <MainLayout navigation={navigation}>
       <StatusBar style="dark" />
       <ScrollView style={styles.envContainer} showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.headerContent}>
-            <View style={styles.iconContainer}>
-              <MaterialCommunityIcons name="office-building" size={24} color="#fff" />
-            </View>
-            <View>
-              <Text style={styles.title}>Ambientes</Text>
-              <Text style={styles.subtitle}>Gerencie seus ambientes</Text>
-            </View>
-          </View>
-        </View>
+        <PageHeader 
+          iconName="office-building" 
+          title="Ambientes" 
+          subtitle="Gerencie seus ambientes" 
+          containerStyle={styles.header}
+          titleStyle={styles.title}
+          subtitleStyle={styles.subtitle}
+        />
 
         <View style={styles.content}>
           {/* Tabs */}

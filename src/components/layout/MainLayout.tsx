@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuth } from '@/context/AuthProvider';
+import { useUser } from '@/context/UserProvider';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 const BOTTOM_BAR_HEIGHT = 70;
@@ -26,6 +27,7 @@ interface MainLayoutProps {
 
 export default function MainLayout({ children, navigation }: MainLayoutProps) {
   const { logout } = useAuth();
+  const { userInfo } = useUser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuPosition = useRef(new Animated.Value(0)).current;
 
@@ -83,11 +85,34 @@ export default function MainLayout({ children, navigation }: MainLayoutProps) {
     outputRange: [0, 0.5],
   });
 
-  const menuItems = [
+  // Verificação de serviços liberados como na Home
+  const bpmsService = userInfo?.selectedEnvironments?.services.find(
+    (s: any) => s.typeProduct === 'ALLOW_MODULE_BPMS'
+  );
+  const signatureService = userInfo?.selectedEnvironments?.services.find(
+    (s: any) => s.typeProduct === 'ALLOW_MODULE_SIGNATURE'
+  );
+  const cloudService = userInfo?.selectedEnvironments?.services.find(
+    (s: any) => s.typeProduct === 'ALLOW_MODULE_CLOUD'
+  );
+
+  const hasBPMS = Boolean(bpmsService?.permissions?.length);
+  const hasSignature = Boolean(signatureService?.permissions?.length);
+  const hasCloud = Boolean(cloudService?.permissions?.length);
+
+  const bpmsIsActive = bpmsService?.active === true;
+  const signatureIsActive = signatureService?.active === true;
+  const cloudIsActive = cloudService?.active === true;
+
+  const bpmsAllowed = hasBPMS && bpmsIsActive;
+  const signatureAllowed = hasSignature && signatureIsActive;
+  const cloudAllowed = hasCloud && cloudIsActive;
+
+  const dynamicMenuItems = [
     { icon: 'home', label: 'Início', screen: 'Home' },
-    { icon: 'file-sign', label: 'Assinatura', screen: 'Assinatura' },
-    { icon: 'sitemap', label: 'BPMS', screen: 'BPMS' },
-    { icon: 'cloud', label: 'Nuvem', screen: 'Cloud' },
+    ...(signatureAllowed ? [{ icon: 'file-sign', label: 'Assinatura', screen: 'Assinatura' }] : []),
+    ...(bpmsAllowed ? [{ icon: 'sitemap', label: 'BPMS', screen: 'BPMS' }] : []),
+    ...(cloudAllowed ? [{ icon: 'cloud', label: 'Nuvem', screen: 'Cloud' }] : []),
     { icon: 'server', label: 'Ambientes', screen: 'Environments' },
     { icon: 'account', label: 'Perfil', screen: 'Profile' },
     { icon: 'exit-to-app', label: 'Sair', screen: 'Login', isLogout: true },
@@ -162,7 +187,7 @@ export default function MainLayout({ children, navigation }: MainLayoutProps) {
           <Text style={styles.menuTitle}>Menu de Navegação</Text>
           
           <View style={styles.menuItems}>
-            {menuItems.map((item, index) => (
+            {dynamicMenuItems.map((item, index) => (
               <TouchableOpacity
                 key={index}
                 style={[
@@ -202,22 +227,23 @@ export default function MainLayout({ children, navigation }: MainLayoutProps) {
 
       {/* Barra inferior fixa */}
       <View style={styles.bottomBar}>
+        {/* Slots à esquerda: BPMS e Assinaturas (fallback para Perfil) */}
         <TouchableOpacity 
           style={styles.bottomButton} 
           activeOpacity={0.7}
-          onPress={() => navigation?.navigate('BPMS')}
+          onPress={() => navigation?.navigate(bpmsAllowed ? 'BPMS' : 'Profile')}
         >
-          <MaterialCommunityIcons name="sitemap" size={24} color="#666" />
-          <Text style={styles.bottomButtonText}>BPMS</Text>
+          <MaterialCommunityIcons name={bpmsAllowed ? 'sitemap' : 'account'} size={24} color="#666" />
+          <Text style={styles.bottomButtonText}>{bpmsAllowed ? 'BPMS' : 'Perfil'}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity 
           style={styles.bottomButton} 
           activeOpacity={0.7}
-          onPress={() => navigation?.navigate('Assinatura')}
+          onPress={() => navigation?.navigate(signatureAllowed ? 'Assinatura' : 'Profile')}
         >
-          <MaterialCommunityIcons name="file-document" size={24} color="#666" />
-          <Text style={styles.bottomButtonText}>Docs</Text>
+          <MaterialCommunityIcons name={signatureAllowed ? 'file-document' : 'account'} size={24} color="#666" />
+          <Text style={styles.bottomButtonText}>{signatureAllowed ? 'Assinaturas' : 'Perfil'}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -230,13 +256,14 @@ export default function MainLayout({ children, navigation }: MainLayoutProps) {
           </View>
         </TouchableOpacity>
 
+        {/* Slots à direita: Nuvem (fallback para Perfil) e Menu */}
         <TouchableOpacity 
           style={styles.bottomButton} 
           activeOpacity={0.7}
-          onPress={() => navigation?.navigate('Cloud')}
+          onPress={() => navigation?.navigate(cloudAllowed ? 'Cloud' : 'Profile')}
         >
-          <MaterialCommunityIcons name="cloud" size={24} color="#666" />
-          <Text style={styles.bottomButtonText}>Nuvem</Text>
+          <MaterialCommunityIcons name={cloudAllowed ? 'cloud' : 'account'} size={24} color="#666" />
+          <Text style={styles.bottomButtonText}>{cloudAllowed ? 'Nuvem' : 'Perfil'}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity 

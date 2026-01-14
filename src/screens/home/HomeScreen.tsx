@@ -78,6 +78,22 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
     );
   }
 
+  type ActivityStatus = 'concluida' | 'cancelada' | 'assinatura' | 'processo';
+  const getActivityStyle = (status: ActivityStatus) => {
+    switch (status) {
+      case 'concluida':
+        return { bg: '#f0fdf4', icon: '#10b981' }; // verde
+      case 'cancelada':
+        return { bg: '#fee2e2', icon: '#ef4444' }; // vermelho
+      case 'assinatura':
+        return { bg: '#fef3c7', icon: '#f59e0b' }; // amarelo
+      case 'processo':
+        return { bg: '#eff6ff', icon: '#4F6AF5' }; // azul
+      default:
+        return { bg: '#f3f4f6', icon: '#6b7280' };
+    }
+  };
+
   return (
     <MainLayout navigation={navigation}>
       <StatusBar style="dark" />
@@ -195,8 +211,8 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
           </View>
 
           <View style={styles.activityCard}>
-            <View style={styles.activityIconContainer}>
-              <MaterialCommunityIcons name="file-check" size={20} color="#10b981" />
+            <View style={[styles.activityIconContainer, { backgroundColor: getActivityStyle('concluida').bg }]}>
+              <MaterialCommunityIcons name="file-check" size={20} color={getActivityStyle('concluida').icon} />
             </View>
             <View style={styles.activityContent}>
               <Text style={styles.activityTitle}>Documento assinado</Text>
@@ -206,8 +222,8 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
           </View>
 
           <View style={styles.activityCard}>
-            <View style={[styles.activityIconContainer, { backgroundColor: '#eff6ff' }]}>
-              <MaterialCommunityIcons name="cloud-upload" size={20} color="#4F6AF5" />
+            <View style={[styles.activityIconContainer, { backgroundColor: getActivityStyle('processo').bg }]}>
+              <MaterialCommunityIcons name="cloud-upload" size={20} color={getActivityStyle('processo').icon} />
             </View>
             <View style={styles.activityContent}>
               <Text style={styles.activityTitle}>Upload realizado</Text>
@@ -217,13 +233,24 @@ export default function HomeScreen({ navigation }: NavigationProps<'Home'>) {
           </View>
 
           <View style={styles.activityCard}>
-            <View style={[styles.activityIconContainer, { backgroundColor: '#fef3c7' }]}>
-              <MaterialCommunityIcons name="cog-sync" size={20} color="#f59e0b" />
+            <View style={[styles.activityIconContainer, { backgroundColor: getActivityStyle('assinatura').bg }]}>
+              <MaterialCommunityIcons name="cog-sync" size={20} color={getActivityStyle('assinatura').icon} />
             </View>
             <View style={styles.activityContent}>
               <Text style={styles.activityTitle}>Fluxo iniciado</Text>
               <Text style={styles.activityDescription}>Aprovação de documento</Text>
               <Text style={styles.activityTime}>Há 3 dias</Text>
+            </View>
+          </View>
+
+          <View style={styles.activityCard}>
+            <View style={[styles.activityIconContainer, { backgroundColor: getActivityStyle('cancelada').bg }]}>
+              <MaterialCommunityIcons name="close-circle" size={20} color={getActivityStyle('cancelada').icon} />
+            </View>
+            <View style={styles.activityContent}>
+              <Text style={styles.activityTitle}>Tarefa cancelada</Text>
+              <Text style={styles.activityDescription}>Fluxo de aprovação</Text>
+              <Text style={styles.activityTime}>Hoje</Text>
             </View>
           </View>
         </View> */}

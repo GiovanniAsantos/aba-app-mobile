@@ -5,6 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { NavigationProps } from '../../types/navigation';
 import type { BpmsFlow } from '../../types/bpms';
 import { MainLayout } from '@/components';
+import PageHeader from '@/components/layout/PageHeader';
 import { FlowSelectionModal } from '@/components/flowSelectionModal';
 import { CreateTaskModal } from '@/components/createTaskModal';
 import { PendingTasks, CreatedTasks } from './components';
@@ -55,26 +56,15 @@ export default function MinhasAtividadesScreen({ navigation }: NavigationProps<'
       <StatusBar style="dark" />
       <View style={styles.activitiesContainer}>
 
-        {/* Header */}
-        <View style={styles.activitiesHeader}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-            activeOpacity={0.7}
-          >
-            <MaterialCommunityIcons name="chevron-left" size={24} color="#1a1a1a" />
-          </TouchableOpacity>
-
-          <View style={styles.headerTitleContainer}>
-            <View style={styles.activitiesIconContainer}>
-              <MaterialCommunityIcons name="checkbox-marked-circle-outline" size={20} color="#fff" />
-            </View>
-            <View style={styles.headerTextContainer}>
-              <Text style={styles.headerTitle}>Minhas Atividades</Text>
-              <Text style={styles.headerSubtitle}>Gerencie suas tarefas e atividades</Text>
-            </View>
-          </View>
-        </View>
+        {/* Page Header */}
+        <PageHeader
+          iconName="checkbox-marked-circle-outline"
+          title="Minhas Atividades"
+          subtitle="Gerencie suas tarefas e atividades"
+          containerStyle={styles.pageHeaderContainer}
+          titleStyle={styles.pageHeaderTitle}
+          subtitleStyle={styles.pageHeaderSubtitle}
+        />
 
         {/* Tabs */}
         <View style={styles.tabsContainer}>

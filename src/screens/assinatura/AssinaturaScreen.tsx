@@ -5,6 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { NavigationProps } from '../../types/navigation';
 import { MainLayout, Button } from '@/components';
 import { styles } from './style';
+import PageHeader from '@/components/layout/PageHeader';
 import ParticipantSignatureTab from './participantSignature';
 import AllSignatureTab from './allSignature';
 import CreateSignature from './createSignature';
@@ -18,11 +19,14 @@ export default function AssinaturaScreen({ navigation }: NavigationProps<'Assina
     <MainLayout navigation={navigation}>
       <StatusBar style="dark" />
       <View style={styles.container}>
-        <View style={styles.header}>
-          <MaterialCommunityIcons name="file-sign" size={32} color="#4F6AF5" />
-          <Text style={styles.title}>Assinatura Digital</Text>
-          <Text style={styles.subtitle}>Gerencie suas assinaturas</Text>
-        </View>
+        <PageHeader
+          iconName="file-sign"
+          title="Assinatura Digital"
+          subtitle="Gerencie suas assinaturas"
+          containerStyle={styles.header}
+          titleStyle={styles.title}
+          subtitleStyle={styles.subtitle}
+        />
 
         {/* Tabs */}
         <View style={styles.tabsContainer}>

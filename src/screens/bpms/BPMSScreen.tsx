@@ -8,6 +8,7 @@ import { MainLayout } from '@/components';
 import { styles } from './style';
 import { apiBpmsUrlV1 } from '@/config/api';
 import { useAuth } from '@/context/AuthProvider';
+import PageHeader from '@/components/layout/PageHeader';
 
 export default function BPMSScreen({ navigation }: NavigationProps<'BPMS'>) {
   const [pizzaData, setPizzaData] = useState<BpmsStatusData[]>([]);
@@ -49,21 +50,27 @@ export default function BPMSScreen({ navigation }: NavigationProps<'BPMS'>) {
   useEffect(() => {
     fetchBpmsGraphicPizza();
   }, [tokens?.accessToken]);
+  
+  const statusColorMap: Record<string, string> = {
+    SUCCESS: '#10b981', // Concluídas - verde
+    CLOSED: '#ef4444',  // Canceladas - vermelho
+    SIGNATURE: '#f59e0b', // Assinaturas - amarelo
+    PROCESS: '#4F6AF5', // Em Processo - azul
+    NO_EFFECT: '#4F6AF5', // tratar como processo
+  };
+  const getStatusColor = (key: string) => statusColorMap[key] || '#4F6AF5';
   return (
     <MainLayout navigation={navigation}>
       <StatusBar style="dark" />
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <View style={styles.headerContent}>
-            <View style={styles.iconContainer}>
-              <MaterialCommunityIcons name="sitemap" size={24} color="#fff" />
-            </View>
-            <View>
-              <Text style={styles.title}>BPMS</Text>
-              <Text style={styles.subtitle}>Gestão de Processos de Negócio</Text>
-            </View>
-          </View>
-        </View>
+        <PageHeader 
+          iconName="sitemap" 
+          title="BPMS" 
+          subtitle="Gestão de Processos de Negócio" 
+          containerStyle={styles.pageHeaderContainer}
+          titleStyle={styles.pageHeaderTitle}
+          subtitleStyle={styles.pageHeaderSubtitle}
+        />
 
         <View style={styles.content}>
           {/* Feature Cards Grid */}
@@ -123,7 +130,8 @@ export default function BPMSScreen({ navigation }: NavigationProps<'BPMS'>) {
                   SUCCESS: 'check-circle',
                   CLOSED: 'close-circle',
                   SIGNATURE: 'draw',
-                  NO_EFFECT: 'cog'
+                  NO_EFFECT: 'cog',
+                  PROCESS: 'cog'
                 };
                 
                 return (
@@ -132,10 +140,10 @@ export default function BPMSScreen({ navigation }: NavigationProps<'BPMS'>) {
                       <MaterialCommunityIcons 
                         name={(statusIcons[item.statusEnum] || 'cog') as any} 
                         size={24} 
-                        color={item.statusColor} 
+                        color={getStatusColor(item.statusEnum)} 
                       />
                     </View>
-                    <Text style={[styles.statValue, { color: item.statusColor }]}>{item.quantity}</Text>
+                    <Text style={[styles.statValue, { color: getStatusColor(item.statusEnum) }]}>{item.quantity}</Text>
                     <Text style={styles.statLabel}>{item.statusNamePt}</Text>
                   </View>
                 );

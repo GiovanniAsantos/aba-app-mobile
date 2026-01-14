@@ -131,7 +131,13 @@ export default function MoveModal({ visible, onClose, item, currentFolderId, onS
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
             <View style={{ flex: 1 }}>
               <Text style={{ fontSize: 18, fontWeight: '600', color: '#1a1a1a' }}>Mover para</Text>
-              <Text style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>{item?.name}</Text>
+              <Text 
+                style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {item?.name}
+              </Text>
             </View>
             <TouchableOpacity onPress={onClose}>
               <MaterialCommunityIcons name="close" size={24} color="#1a1a1a" />
@@ -194,11 +200,23 @@ export default function MoveModal({ visible, onClose, item, currentFolderId, onS
                       }}
                       onPress={() => handleMove(fixedCloudFolder.id)}
                     >
-                      <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                      <View style={{ flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                         <MaterialCommunityIcons name="folder" size={20} color="#d97706" />
-                        <Text style={{ fontWeight: '600' }}>{fixedCloudFolder.name}</Text>
+                        <Text 
+                          style={{ fontWeight: '600', flex: 1, minWidth: 0 }}
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                        >
+                          {fixedCloudFolder.name}
+                        </Text>
                       </View>
-                      <Text style={{ flex: 1, color: '#6b7280', fontSize: 13 }}>{fixedCloudFolder.path}</Text>
+                      <Text 
+                        style={{ flex: 1, minWidth: 0, color: '#6b7280', fontSize: 13 }}
+                        numberOfLines={1}
+                        ellipsizeMode="middle"
+                      >
+                        {fixedCloudFolder.path}
+                      </Text>
                     </TouchableOpacity>
                   )}
 
@@ -215,11 +233,23 @@ export default function MoveModal({ visible, onClose, item, currentFolderId, onS
                         }}
                         onPress={() => handleMove(folder.id)}
                       >
-                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                        <View style={{ flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                           <MaterialCommunityIcons name="folder" size={20} color="#d97706" />
-                          <Text>{folder.name}</Text>
+                          <Text 
+                            style={{ flex: 1, minWidth: 0 }}
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
+                          >
+                            {folder.name}
+                          </Text>
                         </View>
-                        <Text style={{ flex: 1, color: '#6b7280', fontSize: 13 }}>{folder.path || '/'}</Text>
+                        <Text 
+                          style={{ flex: 1, minWidth: 0, color: '#6b7280', fontSize: 13 }}
+                          numberOfLines={1}
+                          ellipsizeMode="middle"
+                        >
+                          {folder.path || '/'}
+                        </Text>
                       </TouchableOpacity>
                     ))
                   ) : (

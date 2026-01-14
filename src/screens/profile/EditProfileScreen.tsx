@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, Alert } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { MainLayout, Button, Input } from '@/components';
+import PageHeader from '@/components/layout/PageHeader';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { styles } from './style';
 import { useUser } from '@/context/UserProvider';
 import { useAuth } from '@/context/AuthProvider';
@@ -158,10 +160,24 @@ export default function EditProfileScreen({ navigation }: NavigationProps<'EditP
     <MainLayout navigation={navigation}>
       <StatusBar style="dark" />
       <ScrollView style={styles.container}>
+        <PageHeader
+          iconName="account-edit"
+          title="Editar Perfil"
+          subtitle="Atualize seu e-mail e senha"
+          containerStyle={styles.pageHeaderContainer}
+          titleStyle={styles.pageHeaderTitle}
+          subtitleStyle={styles.pageHeaderSubtitle}
+        />
+
         {/* Seção de Alteração de E-mail */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Alterar E-mail</Text>
-          <Text style={styles.sectionSubtitle}>E-mail atual: {userInfo?.contact}</Text>
+        <View style={styles.formCard}>
+          <View style={styles.formHeaderRow}>
+            <MaterialCommunityIcons name="email-edit" size={20} color="#4F6AF5" />
+            <Text style={styles.sectionTitle}>Alterar E-mail</Text>
+          </View>
+          <View style={styles.badge}>
+            <Text style={styles.badgeText}>Atual: {userInfo?.contact}</Text>
+          </View>
 
           <Input
             label="Novo E-mail"
@@ -191,8 +207,11 @@ export default function EditProfileScreen({ navigation }: NavigationProps<'EditP
         </View>
 
         {/* Seção de Alteração de Senha */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Alterar Senha</Text>
+        <View style={styles.formCard}>
+          <View style={styles.formHeaderRow}>
+            <MaterialCommunityIcons name="lock-reset" size={20} color="#4F6AF5" />
+            <Text style={styles.sectionTitle}>Alterar Senha</Text>
+          </View>
 
           <Input
             label="Senha Atual"

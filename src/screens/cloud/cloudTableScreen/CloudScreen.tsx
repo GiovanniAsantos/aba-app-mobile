@@ -11,6 +11,7 @@ import type { NavigationProps } from '../../../types/navigation';
 import ModalViewPdf from '@/components/modalViewPdf/ModalViewPdf';
 import * as DocumentPicker from 'expo-document-picker';
 import ReactNativeBlobUtil from 'react-native-blob-util';
+import PageHeader from '@/components/layout/PageHeader';
 import { RenameModal, CreateFolderModal, ShareModal, MoveModal, DetailsModal, PermissionsModal } from '../components';
 import { styles } from './style';
 
@@ -68,8 +69,6 @@ export default function CloudScreen({ navigation }: NavigationProps<'Cloud'>) {
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
-  const [selectedLocation, setSelectedLocation] = useState('Cloud');
-  const [locationModalVisible, setLocationModalVisible] = useState(false);
   const [actionMenuVisible, setActionMenuVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState<CloudItem | null>(null);
   
@@ -408,19 +407,18 @@ export default function CloudScreen({ navigation }: NavigationProps<'Cloud'>) {
     <MainLayout navigation={navigation}>
       <StatusBar style="dark" />
       <View style={styles.cloudContainer}>
+        <PageHeader 
+          iconName="cloud-outline" 
+          title="Cloud" 
+          subtitle="Arquivos e pastas" 
+          containerStyle={styles.pageHeaderContainer}
+          titleStyle={styles.pageHeaderTitle}
+          subtitleStyle={styles.pageHeaderSubtitle}
+        />
 
         {/* Sticky Header */}
         <View style={styles.cloudHeader}>
           <View style={styles.cloudHeaderTop}>
-            <TouchableOpacity
-              style={styles.locationSelector}
-              onPress={() => setLocationModalVisible(true)}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.locationText}>{selectedLocation}</Text>
-              <MaterialCommunityIcons name="chevron-down" size={18} color="#1a1a1a" />
-            </TouchableOpacity>
-
             <View style={styles.viewModeButtons}>
               <TouchableOpacity
                 style={[styles.viewModeButton, viewMode === 'grid' && styles.viewModeButtonActive]}
@@ -567,40 +565,7 @@ export default function CloudScreen({ navigation }: NavigationProps<'Cloud'>) {
           </View>
         </View>
 
-        {/* Location Modal */}
-        <Modal
-          visible={locationModalVisible}
-          transparent={true}
-          animationType="fade"
-          onRequestClose={() => setLocationModalVisible(false)}
-        >
-          <TouchableOpacity
-            style={styles.modalOverlay}
-            activeOpacity={1}
-            onPress={() => setLocationModalVisible(false)}
-          >
-            <View style={styles.locationModal}>
-              {['Cloud', 'Local', 'Compartilhado'].map((location) => (
-                <TouchableOpacity
-                  key={location}
-                  style={styles.locationOption}
-                  onPress={() => {
-                    setSelectedLocation(location);
-                    setLocationModalVisible(false);
-                  }}
-                  activeOpacity={0.7}
-                >
-                  <Text style={[styles.locationOptionText, selectedLocation === location && styles.locationOptionTextActive]}>
-                    {location}
-                  </Text>
-                  {selectedLocation === location && (
-                    <MaterialCommunityIcons name="check" size={20} color="#4F6AF5" />
-                  )}
-                </TouchableOpacity>
-              ))}
-            </View>
-          </TouchableOpacity>
-        </Modal>
+        {/* Location selector removed */}
 
         {/* Action Menu Modal */}
         <Modal
